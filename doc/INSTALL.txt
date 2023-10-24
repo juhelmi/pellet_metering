@@ -1,0 +1,5 @@
+Environment setup
+
+Json module is loaded to external directory 
+cd external/
+git submodule add git@github.com:nlohmann/json.git
