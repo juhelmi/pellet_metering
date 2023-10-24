@@ -1,0 +1,14 @@
+Sources for I2C use on Raspberry Pi 4 B
+
+# https://datasheets.raspberrypi.com/rpi4/raspberry-pi-4-datasheet.pdf
+# https://forums.raspberrypi.com/viewtopic.php?p=2064260&hilit=alternate+i2c#p2064260
+dtoverlay=i2c4,pins_8_9
+dtoverlay=i2c5,pins_12_13
+dtoverlay=i2c6,pins_22_23
+
+
+#dtparam=i2c_arm=on                                                                                       
+dtparam=i2c_arm=on,i2c_arm_baudrate=10000     
+
+https://devrandom.eu/blog/post/2022-04-28-setting_i2c_speed_on_raspberry_pi_4_on_newer_kernels
+
