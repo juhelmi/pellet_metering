@@ -15,17 +15,12 @@ include(AddGitSubmodule)
 # Debug in KDevelop
 set(CMAKE_BUILD_TYPE Debug)
 
-# https://stackoverflow.com/questions/68324093/using-taglib-in-cmake-project-without-installing-it
-
-# taglib
-# https://github.com/taglib/taglib
-# git@github.com:taglib/taglib.git
-# cd external; git submodule add git@github.com:nlohmann/json.git
 
 add_git_submodule(external/json)
+add_git_submodule(external/BME280_driver)
 
 # https://cmake.org/cmake/help/git-master/module/FindBoost.html
-# Use followin lines when boost is OS library
+# Use following lines when boost is OS library
 FIND_PACKAGE( Boost 1.83 COMPONENTS program_options REQUIRED )
 # FIND_PACKAGE( Boost 1.70 COMPONENTS program_options REQUIRED )
 INCLUDE_DIRECTORIES( ${Boost_INCLUDE_DIR} )

@@ -1,3 +1,6 @@
 [submodule "external/json"]
 	path = external/json
 	url = git@github.com:nlohmann/json.git
+[submodule "external/BME280_driver"]
+	path = external/BME280_driver
+	url = git@github.com:juhelmi/BME280_driver.git
