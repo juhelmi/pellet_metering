@@ -3,3 +3,7 @@ Environment setup
 Json module is loaded to external directory 
 cd external/
 git submodule add git@github.com:nlohmann/json.git
+# Original module at https://github.com/boschsensortec/BME280_driver
+git submodule add https://github.com/juhelmi/BME280_driver
+#git@github.com:hepingood/ads1115.git
+git submodule add git@github.com:juhelmi/ads1115.git

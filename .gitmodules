@@ -4,3 +4,6 @@
 [submodule "external/BME280_driver"]
 	path = external/BME280_driver
 	url = git@github.com:juhelmi/BME280_driver.git
+[submodule "external/ads1115"]
+	path = external/ads1115
+	url = git@github.com:juhelmi/ads1115.git
