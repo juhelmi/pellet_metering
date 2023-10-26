@@ -7,3 +7,18 @@ git submodule add git@github.com:nlohmann/json.git
 git submodule add https://github.com/juhelmi/BME280_driver
 #git@github.com:hepingood/ads1115.git
 git submodule add git@github.com:juhelmi/ads1115.git
+
+Later when main repository is cloned and it contains modules git clone is used.
+
+LibBoost install instructions to Raspberry Pi Ubuntu
+Original instructions in https://www.baeldung.com/linux/boost-install-on-ubuntu
+
+wget https://boostorg.jfrog.io/artifactory/main/release/1.83.0/source/boost_1_83_0.tar.gz
+mkdir boost-ver && cd boost-ver
+tar -xzf ../boost_1_83_0.tar.gz
+cd boost_1_83_0/
+./bootstrap.sh
+sudo ./b2 install
+
+# Last phase takes longer time in Raspberry 4 B. Might be good to use "screen" as ssh connection sometimes drops
+# but you can connect to same screen with "screen -D -R".

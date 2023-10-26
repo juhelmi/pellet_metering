@@ -6,6 +6,9 @@ set(CMAKE_CXX_STANDARD          17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS        OFF)
 
+set(SIMULATION  true)
+# set(SIMULATION  false)
+
 set(LIBRARY_NAME Library)
 set(EXECUTABLE_NAME pellets)
 
@@ -21,8 +24,10 @@ add_git_submodule(external/BME280_driver)
 
 # https://cmake.org/cmake/help/git-master/module/FindBoost.html
 # Use following lines when boost is OS library
+# Compile Boost from source. Compile notes on doc directory
 FIND_PACKAGE( Boost 1.83 COMPONENTS program_options REQUIRED )
-# FIND_PACKAGE( Boost 1.70 COMPONENTS program_options REQUIRED )
+# Ubuntu 22.04 has 1.74
+# FIND_PACKAGE( Boost 1.74 COMPONENTS program_options REQUIRED )
 INCLUDE_DIRECTORIES( ${Boost_INCLUDE_DIR} )
 
 add_subdirectory(configured)
