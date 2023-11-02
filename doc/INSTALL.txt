@@ -22,3 +22,13 @@ sudo ./b2 install
 
 # Last phase takes longer time in Raspberry 4 B. Might be good to use "screen" as ssh connection sometimes drops
 # but you can connect to same screen with "screen -D -R".
+
+Install also pi-gpio as source is available. Can be used also in Yocto.
+Source is in https://github.com/Milliways2/pi-gpio/
+Install will go with following lines:
+
+git clone https://github.com/Milliways2/pi-gpio.git
+cd pi-gpio
+./build
+
+For basic library study link code with libpi-gpio ("-l pi-gpio").

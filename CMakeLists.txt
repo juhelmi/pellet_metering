@@ -10,6 +10,7 @@ set(SIMULATION  true)
 # set(SIMULATION  false)
 
 set(LIBRARY_NAME Library)
+set(MEASURING_NAME Measuring)
 set(EXECUTABLE_NAME pellets)
 
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/")
