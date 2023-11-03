@@ -5,6 +5,8 @@ set(MEASURING_SOURCES
     "GPIO_read.cpp"
     "I2C_sensor.cpp"
     "K_TypeTemperature.cpp"
+    "Measurement.cpp"
+    "Scheduler.cpp"
     "Sensor.cpp"
     "Temperature_room.cpp"
     )
@@ -15,6 +17,8 @@ set(MEASURING_HEADERS
     "GPIO_read.h"
     "I2C_sensor.h"
     "K_TypeTemperature.h"
+    "Measurement.h"
+    "Scheduler.h"
     "Sensor.h"
     "Temperature_room.h"
     )

@@ -32,3 +32,5 @@ cd pi-gpio
 ./build
 
 For basic library study link code with libpi-gpio ("-l pi-gpio").
+examples directory goes as using documentation.
+

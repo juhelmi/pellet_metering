@@ -4,6 +4,7 @@
 
 #include <string>
 
+#include "Measurement.h"
 
 /**
   * class Sensor
@@ -18,6 +19,9 @@ Sensor does not have any pure virtual methods, but its author
 
 class Sensor
 {
+private:
+  Measurement mMeasurement;
+
 public:
   // Constructors/Destructors
   //  
@@ -43,6 +47,7 @@ public:
   // Public attribute accessor methods
   //  
 
+  tMeasurementTime getPollingInterval();
 
   // Public attribute accessor methods
   //
