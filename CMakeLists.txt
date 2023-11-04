@@ -31,6 +31,16 @@ FIND_PACKAGE( Boost 1.83 COMPONENTS program_options REQUIRED )
 # FIND_PACKAGE( Boost 1.74 COMPONENTS program_options REQUIRED )
 INCLUDE_DIRECTORIES( ${Boost_INCLUDE_DIR} )
 
+# https://github.com/joan2937/pigpio/blob/master/util/Findpigpio.cmake
+set(LINUX_USR_LIB_PATH "/usr/lib")  # ${LINUX_USR_LIB_PATH}
+find_library(PIGPIO_LIBRARY
+    NAMES libpi-gpio.so HINTS /usr/local/lib)
+if(PIGPIO)
+    message("Pi-gpio found")
+else()
+    message("Fatal error libpi-gpio not found")
+endif()
+
 add_subdirectory(configured)
 add_subdirectory(external)
 add_subdirectory(src)
