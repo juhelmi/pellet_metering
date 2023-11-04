@@ -33,12 +33,12 @@ INCLUDE_DIRECTORIES( ${Boost_INCLUDE_DIR} )
 
 # https://github.com/joan2937/pigpio/blob/master/util/Findpigpio.cmake
 set(LINUX_USR_LIB_PATH "/usr/lib")  # ${LINUX_USR_LIB_PATH}
-find_library(PIGPIO_LIBRARY
-    NAMES libpi-gpio.so HINTS /usr/local/lib)
-if(PIGPIO)
-    message("Pi-gpio found")
+#find_library(PIGPIO_LIBRARY NAMES libpi-gpio.so HINTS /usr/local/lib)
+find_library(PIGPIO_LIBRARY PATHS libpi-gpio.so HINTS /usr/local/lib)
+if(PIGPIO_LIBRARY)
+    message("Pi-gpio found, cmake running in Raspberry Pi with needed library")
 else()
-    message("Fatal error libpi-gpio not found")
+    message("HW library not found libpi-gpio and simulation for HW will be option.")
 endif()
 
 add_subdirectory(configured)
