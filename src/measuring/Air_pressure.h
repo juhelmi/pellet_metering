@@ -20,7 +20,7 @@ public:
   /**
    * Empty Constructor
    */
-  Air_pressure();
+  Air_pressure(int bus, int address);
 
   /**
    * Empty Destructor

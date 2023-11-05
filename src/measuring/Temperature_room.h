@@ -23,7 +23,7 @@ public:
   /**
    * Empty Constructor
    */
-  Temperature_room();
+  Temperature_room(int bus, int address);
 
   /**
    * Empty Destructor

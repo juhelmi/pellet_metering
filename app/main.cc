@@ -13,6 +13,10 @@
 #include "config.hpp"
 #include "i2c_routines.h"
 
+#include "Scheduler.h"
+#include "Sensor.h"
+#include "ADC_sensor.h"
+
 using namespace std;
 namespace fs = std::filesystem;
 
@@ -38,6 +42,13 @@ int main(int argc, char *argv[])
         //setlocale(LC_ALL, "fi_FI.UTF-8");
 
 
+    }
+
+    // Simple demo
+    {
+        Scheduler readTimer ;
+
+        ADC_sensor dummyADC(1,2);
     }
 
     return 0;

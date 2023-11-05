@@ -1,10 +1,44 @@
 #include "I2C_sensor.h"
 
+#include <boost/format.hpp>
+#include <iostream>
+
+#include <stdexcept>
+using namespace std;
+
+// remove
+#include <cstdio>
+#include <string>
+#include <cassert>
+template< typename... Args >
+std::string string_sprintf( const char* format, Args... args ) {
+  int length = std::snprintf( nullptr, 0, format, args... );
+  assert( length >= 0 );
+
+  char* buf = new char[length + 1];
+  std::snprintf( buf, length + 1, format, args... );
+
+  std::string str( buf );
+  delete[] buf;
+  return str;
+}
+//
+
+
 // Constructors/Destructors
 //  
 
 I2C_sensor::I2C_sensor()
 {
+  cout << "Check what is wrong, I2C device will need configuration" << endl;
+  throw std::invalid_argument("As no parameter were given");
+}
+
+I2C_sensor::I2C_sensor(int bus, int address) : mBus(bus), mAddress(address)
+{
+  // mDevName = boost::format("/dev/i2c-%1%" % bus);
+  //cout << boost::format("/dev/i2c-%1%" % bus);
+  cout << string_sprintf("/dev/i2c-%d \n", bus);
   initAttributes();
 }
 

@@ -3,7 +3,7 @@
 // Constructors/Destructors
 //  
 
-ADC_sensor::ADC_sensor()
+ADC_sensor::ADC_sensor(int bus, int address) : I2C_sensor(bus, address)
 {
 }
 

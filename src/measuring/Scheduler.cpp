@@ -58,6 +58,16 @@ tMeasurementTime getCurrnetTime()
     return nanoseconds;
 }
 
+Scheduler::Scheduler()
+{
+}
+
+Scheduler::~Scheduler() noexcept
+{
+}
+
+
+
 void Scheduler::addSensor(Sensor& newSensor)
 {
     // to all sensors

@@ -3,7 +3,7 @@
 // Constructors/Destructors
 //  
 
-Air_pressure::Air_pressure()
+Air_pressure::Air_pressure(int bus, int address) : I2C_sensor(bus,address)
 {
   initAttributes();
 }

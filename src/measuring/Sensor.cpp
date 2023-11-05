@@ -28,3 +28,7 @@ void Sensor::initAttributes()
 {
 }
 
+tMeasurementTime Sensor::getPollingInterval()
+{
+  return 3;
+}

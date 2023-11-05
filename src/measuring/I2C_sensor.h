@@ -20,6 +20,10 @@ I2C_sensor does not have any pure virtual methods, but its author
 
 class I2C_sensor : virtual public Sensor
 {
+  int mBus;
+  int mAddress;
+  std::string   mDevName;
+
 public:
   // Constructors/Destructors
   //  
@@ -29,6 +33,7 @@ public:
    * Empty Constructor
    */
   I2C_sensor();
+  I2C_sensor(int bus, int address);
 
   /**
    * Empty Destructor
