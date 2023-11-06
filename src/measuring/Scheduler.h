@@ -10,8 +10,8 @@
 
 class Scheduler {
 private:
-    std::list<Sensor> mSensors;
-    std::multimap<tMeasurementTime, Sensor> mNextPolls;
+    std::list<Sensor*> mSensors;
+    std::multimap<tMeasurementTime, Sensor*> mNextPolls;
 
 public:
   // Constructors/Destructors
@@ -31,7 +31,7 @@ public:
   // Public attribute accessor methods
   //
 
-  void addSensor(Sensor& newSensor);
+  void addSensor(Sensor *newSensor);
 
   int pollTimedSensors();
 };

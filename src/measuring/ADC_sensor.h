@@ -20,7 +20,7 @@ public:
   /**
    * Empty Constructor
    */
-  ADC_sensor(int bus, int address);
+  ADC_sensor(int pollingInterval, int bus, int address);
 
   /**
    * Empty Destructor

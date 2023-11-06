@@ -28,13 +28,12 @@ std::string string_sprintf( const char* format, Args... args ) {
 // Constructors/Destructors
 //  
 
-I2C_sensor::I2C_sensor()
+I2C_sensor::I2C_sensor() : Sensor(999)
 {
-  cout << "Check what is wrong, I2C device will need configuration" << endl;
-  throw std::invalid_argument("As no parameter were given");
 }
 
-I2C_sensor::I2C_sensor(int bus, int address) : mBus(bus), mAddress(address)
+
+I2C_sensor::I2C_sensor(int pollingInterval, int bus, int address) : Sensor(pollingInterval), mBus(bus), mAddress(address)
 {
   // mDevName = boost::format("/dev/i2c-%1%" % bus);
   //cout << boost::format("/dev/i2c-%1%" % bus);

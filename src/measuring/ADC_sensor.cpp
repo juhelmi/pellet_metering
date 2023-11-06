@@ -3,8 +3,9 @@
 // Constructors/Destructors
 //  
 
-ADC_sensor::ADC_sensor(int bus, int address) : I2C_sensor(bus, address)
+ADC_sensor::ADC_sensor(int pollingInterval, int bus, int address) : Sensor(pollingInterval), I2C_sensor(pollingInterval, bus, address)
 {
+    this->mTag = "ADC_sensor";
 }
 
 ADC_sensor::~ADC_sensor()

@@ -3,7 +3,7 @@
 // Constructors/Destructors
 //  
 
-Temperature_room::Temperature_room(int bus, int address) : I2C_sensor(bus,address)
+Temperature_room::Temperature_room(int pollingInterval, int bus, int address) : Sensor(pollingInterval), I2C_sensor(pollingInterval, bus, address)
 {
   initAttributes();
 }

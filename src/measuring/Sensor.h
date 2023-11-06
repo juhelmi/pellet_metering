@@ -19,9 +19,6 @@ Sensor does not have any pure virtual methods, but its author
 
 class Sensor
 {
-private:
-  Measurement mMeasurement;
-
 public:
   // Constructors/Destructors
   //  
@@ -30,7 +27,8 @@ public:
   /**
    * Empty Constructor
    */
-  Sensor();
+  //Sensor();
+  Sensor(int pollingInterval);
 
   /**
    * Empty Destructor
@@ -48,16 +46,32 @@ public:
   //  
 
   tMeasurementTime getPollingInterval();
+  void setPollingInterval(tMeasurementTime value);
 
   // Public attribute accessor methods
   //
 
+    /**
+   * Set the value of name
+   * @param value the new value of name
+   */
+  void setName(std::string value);
+
+  /**
+   * Get the value of name
+   * @return the value of name
+   */
+  std::string getName();
+
+
 protected:
   // Static Protected attributes
   //  
+  std::string  mTag;
 
   // Protected attributes
   //  
+  int mPollingInterval;
 
 
   // Protected attribute accessor methods
@@ -73,6 +87,7 @@ private:
 
   // Private attributes
   //  
+  Measurement mMeasurement;
 
   std::string name;
   // I2C device number
@@ -86,23 +101,6 @@ private:
   //  
 
 
-  /**
-   * Set the value of name
-   * @param value the new value of name
-   */
-  void setName(std::string value)
-  {
-    name = value;
-  }
-
-  /**
-   * Get the value of name
-   * @return the value of name
-   */
-  std::string getName()
-  {
-    return name;
-  }
 
   /**
    * Set the value of dev

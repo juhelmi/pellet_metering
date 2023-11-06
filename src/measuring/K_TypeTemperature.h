@@ -22,7 +22,7 @@ public:
   /**
    * Empty Constructor
    */
-  K_TypeTemperature(int bus, int address);
+  K_TypeTemperature(int pollingInterval, int bus, int address);
 
   /**
    * Empty Destructor

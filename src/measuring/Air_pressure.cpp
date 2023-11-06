@@ -3,9 +3,10 @@
 // Constructors/Destructors
 //  
 
-Air_pressure::Air_pressure(int bus, int address) : I2C_sensor(bus,address)
+Air_pressure::Air_pressure(int pollingInterval, int bus, int address) : Sensor(pollingInterval), I2C_sensor(pollingInterval, bus, address)
 {
   initAttributes();
+  this->mTag = "Air_pressure";
 }
 
 Air_pressure::~Air_pressure()

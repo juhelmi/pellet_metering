@@ -33,7 +33,7 @@ public:
    * Empty Constructor
    */
   I2C_sensor();
-  I2C_sensor(int bus, int address);
+  I2C_sensor(int pollingInterval, int bus, int address);
 
   /**
    * Empty Destructor

@@ -3,7 +3,7 @@
 // Constructors/Destructors
 //  
 
-GPIO_read::GPIO_read()
+GPIO_read::GPIO_read() : Sensor(998)
 {
 }
 

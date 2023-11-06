@@ -16,6 +16,8 @@
 #include "Scheduler.h"
 #include "Sensor.h"
 #include "ADC_sensor.h"
+#include "Air_pressure.h"
+#include "BME280_sensor.h"
 
 using namespace std;
 namespace fs = std::filesystem;
@@ -48,7 +50,21 @@ int main(int argc, char *argv[])
     {
         Scheduler readTimer ;
 
-        ADC_sensor dummyADC(1,2);
+        int intervalX = 10000;
+
+        ADC_sensor dummyADC(1*intervalX, 1,2);
+        Air_pressure dummyPressure(2*intervalX, 2,3);
+        BME280_sensor dummyBME(4+1*intervalX, 4,0x77);
+
+        readTimer.addSensor(&dummyADC);
+        readTimer.addSensor(&dummyPressure);
+        readTimer.addSensor(&dummyBME);
+
+        for (;;)
+        {
+            readTimer.pollTimedSensors();
+            usleep(1);
+        }
     }
 
     return 0;

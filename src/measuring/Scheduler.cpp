@@ -68,13 +68,13 @@ Scheduler::~Scheduler() noexcept
 
 
 
-void Scheduler::addSensor(Sensor& newSensor)
+void Scheduler::addSensor(Sensor *newSensor)
 {
     // to all sensors
     mSensors.push_back(newSensor);
     // also to scheduled list
-    tMeasurementTime interval = newSensor.getPollingInterval();
-    mNextPolls.insert(std::pair<tMeasurementTime, Sensor>(interval, newSensor));
+    tMeasurementTime interval = getCurrnetTime() + newSensor->getPollingInterval();
+    mNextPolls.insert(std::pair<tMeasurementTime, Sensor*>(interval, newSensor));
 }
 
 int Scheduler::pollTimedSensors()
@@ -83,14 +83,38 @@ int Scheduler::pollTimedSensors()
     tMeasurementTime now = getCurrnetTime();
     int elapsedSensors = 0;
 
-    for (std::multimap<tMeasurementTime,Sensor>::iterator it= mNextPolls.begin();
-         it != mNextPolls.end() && it->first <= now; ++it)
+    // prints current map
+    cout << "Positive times are timed to be run.\n";
+    for (std::multimap<tMeasurementTime,Sensor*>::iterator it= mNextPolls.begin();
+         it != mNextPolls.end(); ++it)
     {
-        std::cout << it->first << "\t" << endl;
+        cout << "Sensor " << it->second->getName() << " " << now - it->first << endl;
+    }
+    cout << "Polling\n";
+    cout << "Now " << now << " First diff " << now -  mNextPolls.begin()->first << endl;
+    if (now < mNextPolls.begin()->first)
+    {
+        return 0;
+    }
+
+    //for (std::multimap<tMeasurementTime,Sensor*>::iterator it= mNextPolls.begin();
+    //     it != mNextPolls.end(); ++it)
+    std::multimap<tMeasurementTime,Sensor*>::iterator it= mNextPolls.begin();
+    {
+        if (it->first > now)
+        {
+            return elapsedSensors;
+        }
+        std::cout << "Sensor " << it->second->getName() <<" " << now - it->first << "\t" << endl;
         //std::cout << it->first << "\t" << it->second << std::endl ;
         //
-        tMeasurementTime nextPoll = it->second.getPollingInterval() + it->first;
-        mNextPolls.insert(std::pair<tMeasurementTime, Sensor>(nextPoll, it->second));
+        tMeasurementTime nextPoll = it->second->getPollingInterval() + it->first;
+        if (nextPoll < now)
+        {
+            nextPoll = now + it->second->getPollingInterval();
+        }
+        cout << "Next for " << it->second->getName() <<" is " << nextPoll << endl;
+        mNextPolls.insert(std::pair<tMeasurementTime, Sensor*>(nextPoll, it->second));
         mNextPolls.erase(it);
         elapsedSensors++;
     }

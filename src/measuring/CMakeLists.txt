@@ -1,6 +1,7 @@
 set(MEASURING_SOURCES
     "ADC_sensor.cpp"
     "Air_pressure.cpp"
+    "BME280_sensor.cpp"
     "GPIO_control.cpp"
     "GPIO_read.cpp"
     "I2C_sensor.cpp"
@@ -13,6 +14,7 @@ set(MEASURING_SOURCES
 set(MEASURING_HEADERS
     "ADC_sensor.h"
     "Air_pressure.h"
+    "BME280_sensor.h"
     "GPIO_control.h"
     "GPIO_read.h"
     "I2C_sensor.h"
