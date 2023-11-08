@@ -7,3 +7,6 @@
 [submodule "external/ads1115"]
 	path = external/ads1115
 	url = git@github.com:juhelmi/ads1115.git
+[submodule "external/pytest-cpp"]
+	path = external/pytest-cpp
+	url = git@github.com:pytest-dev/pytest-cpp.git

@@ -97,14 +97,9 @@ int Scheduler::pollTimedSensors()
         return 0;
     }
 
-    //for (std::multimap<tMeasurementTime,Sensor*>::iterator it= mNextPolls.begin();
-    //     it != mNextPolls.end(); ++it)
     std::multimap<tMeasurementTime,Sensor*>::iterator it= mNextPolls.begin();
+    while (it->first > now)
     {
-        if (it->first > now)
-        {
-            return elapsedSensors;
-        }
         std::cout << "Sensor " << it->second->getName() <<" " << now - it->first << "\t" << endl;
         //std::cout << it->first << "\t" << it->second << std::endl ;
         //
@@ -116,6 +111,7 @@ int Scheduler::pollTimedSensors()
         cout << "Next for " << it->second->getName() <<" is " << nextPoll << endl;
         mNextPolls.insert(std::pair<tMeasurementTime, Sensor*>(nextPoll, it->second));
         mNextPolls.erase(it);
+        it = mNextPolls.begin();
         elapsedSensors++;
     }
     return elapsedSensors;
