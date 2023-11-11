@@ -37,8 +37,6 @@ int main(int argc, char *argv[])
                 << NLOHMANN_JSON_VERSION_MINOR << "."
                 << NLOHMANN_JSON_VERSION_PATCH << "\n";
 
-        std::cout << "Se toimii!\n";
-        std::cout << "No files given as parameter\n";
     } else {
         setlocale(LC_ALL, "en_US.UTF-8");
         //setlocale(LC_ALL, "fi_FI.UTF-8");
@@ -52,6 +50,7 @@ int main(int argc, char *argv[])
 
         int intervalX = 10000;
 
+        I2C_sensor  dummyI2C(intervalX, 0, 0);
         ADC_sensor dummyADC(1*intervalX, 1,2);
         Air_pressure dummyPressure(2*intervalX, 2,3);
         BME280_sensor dummyBME(4+1*intervalX, 4,0x77);
@@ -60,10 +59,10 @@ int main(int argc, char *argv[])
         readTimer.addSensor(&dummyPressure);
         readTimer.addSensor(&dummyBME);
 
-        for (;;)
+        for (int i; i<1000; i++)
         {
             readTimer.pollTimedSensors();
-            usleep(1);
+            usleep(1000);
         }
     }
 

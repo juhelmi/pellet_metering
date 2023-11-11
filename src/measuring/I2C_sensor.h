@@ -6,6 +6,7 @@
 
 #include <string>
 #include <map>
+#include <memory>
 
 
 /**
@@ -35,6 +36,11 @@ public:
    */
   I2C_sensor();
   I2C_sensor(int pollingInterval, int bus, int address);
+  I2C_sensor(I2C_sensor &t);
+  I2C_sensor& operator=(const I2C_sensor& t);
+  // Move
+  I2C_sensor(const I2C_sensor& t);
+  I2C_sensor& operator=(I2C_sensor&& t);
 
   /**
    * Empty Destructor
@@ -78,6 +84,7 @@ protected:
   // Collects list of initialized devices
   // One I2C devices shares multiple functions but there will be objects for handling only one function from real device.
   static int mAllSensorCount;
+  //static std::map<std::pair<int,int>, std::shared_ptr<I2C_sensor>> mMapOfActiveSensors;
   static std::map<std::pair<int,int>, I2C_sensor*> mMapOfActiveSensors;
 
   // Protected attributes
@@ -102,8 +109,6 @@ private:
   // Private attributes
   //  
 
-  int address;
-  int dev_nr;
 
   // Private attribute accessor methods
   //  

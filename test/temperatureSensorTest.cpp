@@ -21,7 +21,13 @@ using namespace std;
 class I2C_sensor_test : I2C_sensor
 {
 public:
-    I2C_sensor_test() : Sensor(1)
+    /*
+    I2C_sensor_test() : I2C_sensor(0, -1, -1)
+    {
+        cout << "This is not target " << __FUNCTION__ << endl;
+    }
+    */
+    I2C_sensor_test(int pollingInterval, int bus, int address) : Sensor(pollingInterval), I2C_sensor(pollingInterval, bus, address)
     {
     };
     int isUsed(int port, int address)
@@ -44,21 +50,21 @@ BOOST_AUTO_TEST_CASE(i2c_check_test)
 	Scheduler readTimer ;
 
         int intervalX = 100*1000;
-        I2C_sensor_test statusCheck;
+        I2C_sensor_test statusCheck(intervalX, 0,0);
 
-        BOOST_CHECK_EQUAL(statusCheck.getAllUsedCount(), 0);
+        BOOST_CHECK_EQUAL(statusCheck.getAllUsedCount(), 1);
         BOOST_CHECK_EQUAL(statusCheck.isUsed(2,3), false);
         Temperature_room dummyTemp(1*intervalX, 2, 3);
-        BOOST_CHECK_EQUAL(statusCheck.getAllUsedCount(), 1);
+        BOOST_CHECK_EQUAL(statusCheck.getAllUsedCount(), 2);
         BOOST_CHECK_EQUAL(statusCheck.isUsed(2,3), true);
         Air_pressure dummyPressure(2*intervalX, 2,3);
         BME280_sensor dummyBME(4+1*intervalX, 4,0x77);
-        BOOST_CHECK_EQUAL(statusCheck.getAllUsedCount(), 3);
+        BOOST_CHECK_EQUAL(statusCheck.getAllUsedCount(), 4);
 
         Temperature_room temp2(intervalX, 3, 3);
         Air_pressure press2(2*intervalX, 3, 3);
-        BOOST_CHECK_EQUAL(statusCheck.getAllUsedCount(), 5);
-        BOOST_CHECK_EQUAL(statusCheck.getMapSize(), 3);
+        BOOST_CHECK_EQUAL(statusCheck.getAllUsedCount(), 6);
+        BOOST_CHECK_EQUAL(statusCheck.getMapSize(), 4);
 
         readTimer.addSensor(&dummyTemp);
         readTimer.addSensor(&dummyPressure);

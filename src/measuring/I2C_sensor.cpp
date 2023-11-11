@@ -29,12 +29,15 @@ std::string string_sprintf( const char* format, Args... args ) {
 //  
 
 int I2C_sensor::mAllSensorCount = 0;
+//std::map<std::pair<int,int>, std::shared_ptr<I2C_sensor>> I2C_sensor::mMapOfActiveSensors;
 std::map<std::pair<int,int>, I2C_sensor*> I2C_sensor::mMapOfActiveSensors;
 
+#if 1
 I2C_sensor::I2C_sensor() : Sensor(999)
 {
+  cout << "I2C Default " << __FUNCTION__ << __LINE__ << endl;
 }
-
+#endif
 
 I2C_sensor::I2C_sensor(int pollingInterval, int bus, int address) : Sensor(pollingInterval), mBus(bus), mAddress(address)
 {
@@ -44,6 +47,44 @@ I2C_sensor::I2C_sensor(int pollingInterval, int bus, int address) : Sensor(polli
   cout << string_sprintf("/dev/i2c-%d \n", bus);
   initAttributes();
 }
+
+#if 1
+I2C_sensor::I2C_sensor(I2C_sensor& t)
+{
+  mBus = t.mBus;
+  mAddress = t.mAddress;
+  mDevName = t.mDevName;
+  cout << "Copy contructor " << __FUNCTION__ << __LINE__ << endl;
+}
+#endif
+
+I2C_sensor & I2C_sensor::operator=(const I2C_sensor& t)
+{
+  mBus = t.mBus;
+  mAddress = t.mAddress;
+  mDevName = t.mDevName;
+  cout << "Assignment " << __FUNCTION__ << __LINE__ << endl;
+  return *this;
+}
+
+
+I2C_sensor::I2C_sensor(const I2C_sensor& t)
+{
+  mBus = t.mBus;
+  mAddress = t.mAddress;
+  mDevName = t.mDevName;
+  cout << "Nearly move " << __FUNCTION__ << __LINE__ << endl;
+}
+
+I2C_sensor & I2C_sensor::operator=(I2C_sensor && t)
+{
+  mBus = t.mBus;
+  mAddress = t.mAddress;
+  mDevName = t.mDevName;
+  cout << "Nearly move = " << __FUNCTION__ << __LINE__ << endl;
+  return *this;
+}
+
 
 I2C_sensor::~I2C_sensor()
 {
@@ -55,30 +96,28 @@ I2C_sensor::~I2C_sensor()
 
 
 // Accessor methods
-//  
+//  std::shared_ptr<
 
 
 // Other methods
 //  
-
 void I2C_sensor::initAttributes()
 {
-  address = 0;
 }
 
 void I2C_sensor::setAddress(int value)
   {
-    address = value;
+    mAddress = value;
   }
 
 int I2C_sensor::getAddress()
   {
-    return address;
+    return mAddress;
   }
 
   void I2C_sensor::setDev_nr(int value)
   {
-    dev_nr = value;
+    mBus = value;
   }
 
   /**
@@ -87,7 +126,7 @@ int I2C_sensor::getAddress()
    */
   int I2C_sensor::getDev_nr()
   {
-    return dev_nr;
+    return mBus;
   }
 
   bool I2C_sensor::isSensorUsed(int port, int address)
@@ -107,6 +146,7 @@ int I2C_sensor::getAddress()
     mAllSensorCount++;
     if (mMapOfActiveSensors.count(key) <= 0)
     {
+      //mMapOfActiveSensors[key] = std::make_shared<I2C_sensor>(this);
       mMapOfActiveSensors[key] = this;
       return true;
     }
