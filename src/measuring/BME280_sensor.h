@@ -90,8 +90,6 @@ private:
   // Private attributes
   //  
 
-  int mDev;
-  int mAddress;
 
   // Private attribute accessor methods
   //  
@@ -107,7 +105,6 @@ private:
    */
   void setMDev(int value)
   {
-    mDev = value;
   }
 
   /**
@@ -116,7 +113,7 @@ private:
    */
   int getMDev()
   {
-    return mDev;
+    return 0;
   }
 
   /**
@@ -125,7 +122,6 @@ private:
    */
   void setMAddress(int value)
   {
-    mAddress = value;
   }
 
   /**
@@ -134,7 +130,7 @@ private:
    */
   int getMAddress()
   {
-    return mAddress;
+    return 0;
   }
 
   void initAttributes();

@@ -5,6 +5,7 @@
 #include "Sensor.h"
 
 #include <string>
+#include <map>
 
 
 /**
@@ -74,10 +75,18 @@ public:
 protected:
   // Static Protected attributes
   //  
+  // Collects list of initialized devices
+  // One I2C devices shares multiple functions but there will be objects for handling only one function from real device.
+  static int mAllSensorCount;
+  static std::map<std::pair<int,int>, I2C_sensor*> mMapOfActiveSensors;
 
   // Protected attributes
   //  
 
+  bool isSensorUsed(int port, int address);
+  I2C_sensor* getDevice(int port, int address);
+  bool addThisSensor(int port, int address);
+  void removeThisSensor(int port, int address);
 
   // Protected attribute accessor methods
   //  

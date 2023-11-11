@@ -4,6 +4,7 @@
 
 #include "I2C_sensor.h"
 #include "I2C_sensor.h"
+#include "BME280_sensor.h"
 
 #include <string>
 
@@ -15,6 +16,9 @@
 
 class Temperature_room : virtual public I2C_sensor
 {
+private:
+  BME280_sensor *mRealSensor;
+
 public:
   // Constructors/Destructors
   //  

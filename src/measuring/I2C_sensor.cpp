@@ -28,6 +28,9 @@ std::string string_sprintf( const char* format, Args... args ) {
 // Constructors/Destructors
 //  
 
+int I2C_sensor::mAllSensorCount = 0;
+std::map<std::pair<int,int>, I2C_sensor*> I2C_sensor::mMapOfActiveSensors;
+
 I2C_sensor::I2C_sensor() : Sensor(999)
 {
 }
@@ -35,6 +38,7 @@ I2C_sensor::I2C_sensor() : Sensor(999)
 
 I2C_sensor::I2C_sensor(int pollingInterval, int bus, int address) : Sensor(pollingInterval), mBus(bus), mAddress(address)
 {
+  addThisSensor(bus, address);
   // mDevName = boost::format("/dev/i2c-%1%" % bus);
   //cout << boost::format("/dev/i2c-%1%" % bus);
   cout << string_sprintf("/dev/i2c-%d \n", bus);
@@ -85,3 +89,31 @@ int I2C_sensor::getAddress()
   {
     return dev_nr;
   }
+
+  bool I2C_sensor::isSensorUsed(int port, int address)
+  {
+    std::pair<int, int> key(port, address);
+    return mMapOfActiveSensors.count(key) > 0;
+  }
+
+  I2C_sensor* I2C_sensor::getDevice(int port, int address)
+  {
+    return 0;
+  }
+
+  bool I2C_sensor::addThisSensor(int port, int address)
+  {
+    std::pair<int, int> key(port, address);
+    mAllSensorCount++;
+    if (mMapOfActiveSensors.count(key) <= 0)
+    {
+      mMapOfActiveSensors[key] = this;
+      return true;
+    }
+    return false;
+  }
+
+void I2C_sensor::removeThisSensor(int port, int address)
+{
+  mAllSensorCount--;
+}

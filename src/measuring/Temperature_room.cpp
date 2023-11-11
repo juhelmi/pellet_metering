@@ -5,6 +5,7 @@
 
 Temperature_room::Temperature_room(int pollingInterval, int bus, int address) : Sensor(pollingInterval), I2C_sensor(pollingInterval, bus, address)
 {
+  mRealSensor = 0;
   initAttributes();
 }
 

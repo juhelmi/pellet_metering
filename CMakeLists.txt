@@ -31,19 +31,6 @@ FIND_PACKAGE( Boost 1.83 COMPONENTS program_options REQUIRED )
 # FIND_PACKAGE( Boost 1.74 COMPONENTS program_options REQUIRED )
 INCLUDE_DIRECTORIES( ${Boost_INCLUDE_DIR} )
 
-#enable_testing()
-#find_package(Boost COMPONENTS unit_test_framework REQUIRED)
-# find_package(Boost CONFIG COMPONENTS system filesystem unit_test_framework REQUIRED)
-#add_executable(testTheTester test/boostTester.cpp)
-if(false)
-target_link_libraries(testTheTester
-  PRIVATE
-  Boost::filesystem
-  Boost::system
-  Boost::unit_test_framework
-  )
-endif()
-
 # https://github.com/joan2937/pigpio/blob/master/util/Findpigpio.cmake
 set(LINUX_USR_LIB_PATH "/usr/lib")  # ${LINUX_USR_LIB_PATH}
 #find_library(PIGPIO_LIBRARY NAMES libpi-gpio.so HINTS /usr/local/lib)
@@ -58,6 +45,7 @@ add_subdirectory(configured)
 add_subdirectory(external)
 add_subdirectory(src)
 add_subdirectory(app)
-#add_subdirectory(test)
+#Unit testing
+add_subdirectory(test)
 
 
