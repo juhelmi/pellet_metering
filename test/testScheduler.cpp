@@ -48,12 +48,16 @@ BOOST_AUTO_TEST_CASE(Scheduler_test_Test)
 
     BOOST_CHECK_EQUAL(readTimer.getSensorCount(), 0);
     BOOST_CHECK_EQUAL(readTimer.getPollingListSize(), 0);
-    Temperature_room dummyTemp(1*intervalX, 2, 3);
-    Air_pressure dummyPressure(2*intervalX, 2,3);
-    BME280_sensor dummyBME(4+1*intervalX, 4,0x77);
+    Temperature_room dummyTemp(9*intervalX/5, 2, 3);
+    dummyTemp.setLocation("Out door");
+    Air_pressure dummyPressure(9*intervalX/4, 2,3);
+    dummyPressure.setLocation("Out door");
+    BME280_sensor dummyBME(4+4*intervalX, 4,0x77);
 
-    Temperature_room temp2(intervalX, 3, 3);
+    Temperature_room temp2(3*intervalX/2, 3, 3);
+    temp2.setLocation("Storage");
     Air_pressure press2(2*intervalX, 3, 3);
+    press2.setLocation("Storage");
 
     BOOST_CHECK_EQUAL(readTimer.getSensorCount(), 0);
     BOOST_CHECK_EQUAL(readTimer.getPollingListSize(), 0);
@@ -61,9 +65,11 @@ BOOST_AUTO_TEST_CASE(Scheduler_test_Test)
     readTimer.addSensor(&dummyTemp);
     readTimer.addSensor(&dummyPressure);
     readTimer.addSensor(&dummyBME);
+    readTimer.addSensor(&temp2);
+    readTimer.addSensor(&press2);
 
-    BOOST_CHECK_EQUAL(readTimer.getSensorCount(), 3);
-    BOOST_CHECK_EQUAL(readTimer.getPollingListSize(), 3);
+    BOOST_CHECK_EQUAL(readTimer.getSensorCount(), 5);
+    BOOST_CHECK_EQUAL(readTimer.getPollingListSize(), 5);
 
     Sensor *p_sens = readTimer.getNextTimedSensor();
     cout << "First name in list " << p_sens->getName() << endl;
@@ -71,12 +77,14 @@ BOOST_AUTO_TEST_CASE(Scheduler_test_Test)
     tMeasurementTime nextHit = readTimer.getNextLaunchTime();
     tMeasurementTime now = getCurrentTime();
     cout << "Now " << now << " next " << nextHit << " Diff: " << nextHit - now << endl;
-    BOOST_CHECK_EQUAL(compareTimeInMsRange(nextHit, check_interval), true);
+    BOOST_CHECK_EQUAL(compareTimeInMsRange(nextHit, check_interval*1.5), true);
 
-    for (int i=0; i<5; i++)
+    for (int i=0; i<10; i++)
     {
+        p_sens = readTimer.getNextTimedSensor();
+        cout << "First name in list " << p_sens->getName() << " Location: " << p_sens->getLocation() << endl;
         readTimer.pollTimedSensors();
-        usleep(50*1000);
+        usleep(check_interval/2*1000);
     }
 }
 

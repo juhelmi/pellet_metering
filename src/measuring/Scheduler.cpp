@@ -123,7 +123,7 @@ int Scheduler::pollTimedSensors()
         {
             nextPoll = now + it->second->getPollingInterval();
         }
-        cout << "Next for " << it->second->getName() <<" is " << nextPoll << "Forward time " << nextPoll-now << endl;
+        cout << "Next for " << it->second->getName() <<" is " << nextPoll << " Forward time " << nextPoll-now << endl;
         mNextPolls.insert(std::pair<tMeasurementTime, Sensor*>(nextPoll, it->second));
         mNextPolls.erase(it);
         it = mNextPolls.begin();

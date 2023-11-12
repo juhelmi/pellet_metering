@@ -65,3 +65,15 @@ void Sensor::setName(std::string value)
 {
   mTag = value;
 }
+
+void Sensor::setLocation(std::string value)
+{
+  mLocation = value;
+}
+
+std::string Sensor::getLocation()
+{
+  return mLocation;
+}
+
+

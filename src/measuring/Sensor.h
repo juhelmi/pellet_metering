@@ -56,12 +56,15 @@ public:
    * @return the value of name
    */
   std::string getName();
+  void setLocation(std::string value);
+  std::string getLocation();
 
 
 protected:
   // Static Protected attributes
   //  
-  std::string  mTag;
+  std::string mTag;           // at start this contains object type name
+  std::string mLocation;  // For user documentation
 
   // Protected attributes
   //  
