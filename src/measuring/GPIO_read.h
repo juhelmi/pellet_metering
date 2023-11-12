@@ -7,6 +7,7 @@
 
 #include <string>
 
+// HW example is pi-gpio and examples/getGPIO.c
 
 /**
   * class GPIO_read
@@ -24,6 +25,7 @@ public:
    * Empty Constructor
    */
   GPIO_read();
+  GPIO_read(int pollingInterval, int pinIndex);
 
   /**
    * Empty Destructor
@@ -44,20 +46,22 @@ public:
   // Public attribute accessor methods
   //  
 
-
+  void executeSensorValueRead() override;
 
   /**
-   * @return bool
-   * @param  port_index
+   * @return int
+   * @param  pinIndex
    */
-  bool read(int port_index)
+  int read(int pinIndex)
   {
-    return false;
+    return 0;
   }
 
 protected:
   // Static Protected attributes
   //  
+  int mPinIndex;  // Raspberry Pi 4B values in range 0..27
+  std::string mPinName;
 
   // Protected attributes
   //  

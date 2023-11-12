@@ -11,6 +11,8 @@
 #include "Temperature_room.h"
 #include "BME280_sensor.h"
 
+#include "GPIO_read.h"
+
 using namespace std;
 
 #define BOOST_TEST_MODULE Scheduler_test Test
@@ -70,6 +72,11 @@ BOOST_AUTO_TEST_CASE(Scheduler_test_Test)
 
     BOOST_CHECK_EQUAL(readTimer.getSensorCount(), 5);
     BOOST_CHECK_EQUAL(readTimer.getPollingListSize(), 5);
+
+    GPIO_read dummyPin(2*intervalX-5, 7);
+    dummyPin.setLocation("Just IO read");
+    readTimer.addSensor(&dummyPin);
+    BOOST_CHECK_EQUAL(readTimer.getSensorCount(), 6);
 
     Sensor *p_sens = readTimer.getNextTimedSensor();
     cout << "First name in list " << p_sens->getName() << endl;
