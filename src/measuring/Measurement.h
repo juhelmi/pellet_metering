@@ -6,7 +6,7 @@
 
 enum MeasurementType {tDOUDBLE, tINT};
 
-typedef uint64_t tMeasurementTime;
+typedef int64_t tMeasurementTime;
 
 
 struct SingleMeasurement {

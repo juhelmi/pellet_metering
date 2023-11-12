@@ -58,14 +58,10 @@ tMeasurementTime Sensor::getPollingInterval()
 
 std::string Sensor::getName()
 {
-  if (name.empty())
-  {
-    return mTag;
-  }
-  return name;
+  return mTag;
 }
 
 void Sensor::setName(std::string value)
 {
-  name = value;
+  mTag = value;
 }

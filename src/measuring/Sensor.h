@@ -51,12 +51,6 @@ public:
   // Public attribute accessor methods
   //
 
-    /**
-   * Set the value of name
-   * @param value the new value of name
-   */
-  void setName(std::string value);
-
   /**
    * Get the value of name
    * @return the value of name
@@ -72,6 +66,12 @@ protected:
   // Protected attributes
   //  
   int mPollingInterval;
+
+    /**
+   * Set the value of name
+   * @param value the new value of name
+   */
+  void setName(std::string value);
 
 
   // Protected attribute accessor methods
@@ -89,7 +89,6 @@ private:
   //  
   Measurement mMeasurement;
 
-  std::string name;
   // I2C device number
   int dev;
 

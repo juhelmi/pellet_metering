@@ -7,6 +7,7 @@ Temperature_room::Temperature_room(int pollingInterval, int bus, int address) : 
 {
   mRealSensor = 0;
   initAttributes();
+  mTag = "Temperature_room";
 }
 
 Temperature_room::~Temperature_room()

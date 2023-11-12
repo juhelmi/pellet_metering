@@ -18,15 +18,9 @@ using namespace std;
 
 // https://www.boost.org/doc/libs/1_83_0/libs/test/doc/html/boost_test/utf_reference.html
 
-class I2C_sensor_test : I2C_sensor
+class I2C_sensor_test : public I2C_sensor
 {
 public:
-    /*
-    I2C_sensor_test() : I2C_sensor(0, -1, -1)
-    {
-        cout << "This is not target " << __FUNCTION__ << endl;
-    }
-    */
     I2C_sensor_test(int pollingInterval, int bus, int address) : Sensor(pollingInterval), I2C_sensor(pollingInterval, bus, address)
     {
     };
@@ -73,7 +67,8 @@ BOOST_AUTO_TEST_CASE(i2c_check_test)
         for (int i=0; i<2; i++)
         {
             readTimer.pollTimedSensors();
-            usleep(50*1000);
+            //usleep(1*1000);
+            usleep(10);
         }
 }
 #else

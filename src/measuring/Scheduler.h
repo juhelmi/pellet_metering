@@ -8,8 +8,12 @@
 #include "Measurement.h"
 #include "Sensor.h"
 
+tMeasurementTime getCurrentTime();
+bool compareTimeInMsRange(tMeasurementTime compareTime, tMeasurementTime range);
+
 class Scheduler {
 private:
+protected:
     std::list<Sensor*> mSensors;
     std::multimap<tMeasurementTime, Sensor*> mNextPolls;
 

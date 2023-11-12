@@ -35,7 +35,7 @@ using namespace std;
 
 #define SEC_TO_NS(sec) ((sec)*1000000000)
 
-tMeasurementTime getCurrnetTime()
+tMeasurementTime getCurrentTime()
 {
     // https://stackoverflow.com/questions/5833094/get-a-timestamp-in-c-in-microseconds
     /// Convert seconds to nanoseconds
@@ -58,6 +58,19 @@ tMeasurementTime getCurrnetTime()
     return nanoseconds;
 }
 
+bool compareTimeInMsRange(tMeasurementTime compareTime, tMeasurementTime range)
+{
+    const tMeasurementTime nsToMsDivisor = 1000000;
+    tMeasurementTime now = getCurrentTime() / nsToMsDivisor;
+    tMeasurementTime compMs = compareTime / nsToMsDivisor;
+    if ((compMs - range <= now) && (compMs + range >= now))
+    {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 Scheduler::Scheduler()
 {
 }
@@ -73,34 +86,36 @@ void Scheduler::addSensor(Sensor *newSensor)
     // to all sensors
     mSensors.push_back(newSensor);
     // also to scheduled list
-    tMeasurementTime interval = getCurrnetTime() + newSensor->getPollingInterval();
+    tMeasurementTime interval = getCurrentTime() + newSensor->getPollingInterval();
     mNextPolls.insert(std::pair<tMeasurementTime, Sensor*>(interval, newSensor));
 }
 
 int Scheduler::pollTimedSensors()
 {
     // Get Current time
-    tMeasurementTime now = getCurrnetTime();
+    int64_t now = getCurrentTime();
     int elapsedSensors = 0;
+    const int64_t nsToUsDivisor = 1000;
 
     // prints current map
     cout << "Positive times are timed to be run.\n";
     for (std::multimap<tMeasurementTime,Sensor*>::iterator it= mNextPolls.begin();
          it != mNextPolls.end(); ++it)
     {
-        cout << "Sensor " << it->second->getName() << " " << now - it->first << endl;
+        cout << "Sensor " << it->second->getName() << " " << (it->first - now)/nsToUsDivisor << endl;
     }
     cout << "Polling\n";
-    cout << "Now " << now << " First diff " << now -  mNextPolls.begin()->first << endl;
+    cout << "Now " << now << " First diff " << mNextPolls.begin()->first - now << endl;
     if (now < mNextPolls.begin()->first)
     {
+        cout << "wait more " << mNextPolls.begin()->first - now << endl;
         return 0;
     }
 
     std::multimap<tMeasurementTime,Sensor*>::iterator it= mNextPolls.begin();
-    while (it->first > now)
+    while (now > it->first)
     {
-        std::cout << "Sensor " << it->second->getName() <<" " << now - it->first << "\t" << endl;
+        std::cout << "Elapsed Sensor " << it->second->getName() <<" " << (now - it->first)/nsToUsDivisor << "\t" << endl;
         //std::cout << it->first << "\t" << it->second << std::endl ;
         //
         tMeasurementTime nextPoll = it->second->getPollingInterval() + it->first;
@@ -108,7 +123,7 @@ int Scheduler::pollTimedSensors()
         {
             nextPoll = now + it->second->getPollingInterval();
         }
-        cout << "Next for " << it->second->getName() <<" is " << nextPoll << endl;
+        cout << "Next for " << it->second->getName() <<" is " << nextPoll << "Forward time " << nextPoll-now << endl;
         mNextPolls.insert(std::pair<tMeasurementTime, Sensor*>(nextPoll, it->second));
         mNextPolls.erase(it);
         it = mNextPolls.begin();
