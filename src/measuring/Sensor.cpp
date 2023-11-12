@@ -76,4 +76,9 @@ std::string Sensor::getLocation()
   return mLocation;
 }
 
+void Sensor::executeSensorValueRead()
+{
+  cout << "Reads value for " << mTag << " Location " << mLocation << endl;
+}
+
 

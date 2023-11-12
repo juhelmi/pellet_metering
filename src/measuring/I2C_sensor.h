@@ -22,6 +22,7 @@ I2C_sensor does not have any pure virtual methods, but its author
 
 class I2C_sensor : virtual public Sensor
 {
+protected:
   int mBus;
   int mAddress;
   std::string   mDevName;
@@ -61,6 +62,7 @@ public:
   // Public attribute accessor methods
   //  
 
+  void executeSensorValueRead() override;
 
 
   /**

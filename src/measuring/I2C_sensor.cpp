@@ -105,6 +105,12 @@ void I2C_sensor::initAttributes()
 {
 }
 
+void I2C_sensor::executeSensorValueRead()
+{
+  cout << "I2C read for " << mTag << " Bus " << mBus << " Address " << mAddress << " Location " << mLocation << endl;
+}
+
+
 void I2C_sensor::setAddress(int value)
   {
     mAddress = value;

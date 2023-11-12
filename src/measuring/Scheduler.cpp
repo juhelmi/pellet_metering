@@ -115,7 +115,11 @@ int Scheduler::pollTimedSensors()
     std::multimap<tMeasurementTime,Sensor*>::iterator it= mNextPolls.begin();
     while (now > it->first)
     {
-        std::cout << "Elapsed Sensor " << it->second->getName() <<" " << (now - it->first)/nsToUsDivisor << "\t" << endl;
+        Sensor *p_sensor = it->second;
+        std::cout << "Elapsed Sensor " << p_sensor->getName() <<" " << (now - it->first)/nsToUsDivisor << "\t" << endl;
+        // Start query process
+        // Later this will set task on queue. I2C devices will have own thread for separate HW drivers
+        p_sensor->executeSensorValueRead();
         //std::cout << it->first << "\t" << it->second << std::endl ;
         //
         tMeasurementTime nextPoll = it->second->getPollingInterval() + it->first;

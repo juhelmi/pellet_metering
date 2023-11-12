@@ -44,6 +44,7 @@ public:
 
   // Public attribute accessor methods
   //  
+  virtual void executeSensorValueRead();  // will be overriden
 
   tMeasurementTime getPollingInterval();
   void setPollingInterval(tMeasurementTime value);

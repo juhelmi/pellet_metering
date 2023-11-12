@@ -1,4 +1,7 @@
 #include "Temperature_room.h"
+#include <iostream>
+
+using namespace std;
 
 // Constructors/Destructors
 //  
@@ -30,5 +33,10 @@ void Temperature_room::initAttributes()
 {
   minTemp = -10;
   maxTemp = 60;
+}
+
+void Temperature_room::executeSensorValueRead()
+{
+  cout << "Room temperature read for " << mTag << " Bus " << mBus << " Location " << mLocation << endl;
 }
 

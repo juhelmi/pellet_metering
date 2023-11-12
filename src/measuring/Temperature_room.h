@@ -48,7 +48,7 @@ public:
   // Public attribute accessor methods
   //  
 
-
+  void executeSensorValueRead() override;
 
   /**
    * @return double
