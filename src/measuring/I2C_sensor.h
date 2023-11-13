@@ -7,6 +7,7 @@
 #include <string>
 #include <map>
 #include <memory>
+#include <boost/ref.hpp>
 
 
 /**
@@ -86,7 +87,8 @@ protected:
   // Collects list of initialized devices
   // One I2C devices shares multiple functions but there will be objects for handling only one function from real device.
   static int mAllSensorCount;
-  //static std::map<std::pair<int,int>, std::shared_ptr<I2C_sensor>> mMapOfActiveSensors;
+  // Typically Sensor objects are not created with new. No shared_ptr is needed and no delete is need to call directly.
+  //static std::map<std::pair<int,int>, std::shared_ptr<I2C_sensor> > mMapOfActiveSensors;
   static std::map<std::pair<int,int>, I2C_sensor*> mMapOfActiveSensors;
 
   // Protected attributes

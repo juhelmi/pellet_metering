@@ -2,6 +2,7 @@
 
 #include <boost/format.hpp>
 #include <iostream>
+#include <boost/ref.hpp>
 
 #include <stdexcept>
 using namespace std;
@@ -29,7 +30,7 @@ std::string string_sprintf( const char* format, Args... args ) {
 //  
 
 int I2C_sensor::mAllSensorCount = 0;
-//std::map<std::pair<int,int>, std::shared_ptr<I2C_sensor>> I2C_sensor::mMapOfActiveSensors;
+//std::map<std::pair<int,int>, std::shared_ptr<I2C_sensor> > I2C_sensor::mMapOfActiveSensors;
 std::map<std::pair<int,int>, I2C_sensor*> I2C_sensor::mMapOfActiveSensors;
 
 #if 1
@@ -148,11 +149,12 @@ int I2C_sensor::getAddress()
 
   bool I2C_sensor::addThisSensor(int port, int address)
   {
+    // Typically Sensor objects are not created with new. No shared_ptr is needed and no delete is need to call directly
     std::pair<int, int> key(port, address);
     mAllSensorCount++;
     if (mMapOfActiveSensors.count(key) <= 0)
     {
-      //mMapOfActiveSensors[key] = std::make_shared<I2C_sensor>(this);
+      //mMapOfActiveSensors[key] = make_shared<I2C_sensor>(mPollingInterval, port, address);
       mMapOfActiveSensors[key] = this;
       return true;
     }

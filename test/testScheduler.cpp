@@ -16,7 +16,12 @@
 using namespace std;
 
 #define BOOST_TEST_MODULE Scheduler_test Test
-#include <boost/test/included/unit_test.hpp>
+//#include <boost/test/included/unit_test.hpp>
+#define BOOST_TEST_DYN_LINK
+#include <boost/test/unit_test.hpp>
+namespace utf = boost::unit_test;
+namespace tt = boost::test_tools;
+
 
 class Scheduler_test : public Scheduler
 {
@@ -31,6 +36,10 @@ public:
     }
     Sensor* getNextTimedSensor()
     {
+        if (mNextPolls.size() == 0)
+        {
+            return nullptr;
+        }
         auto it= mNextPolls.begin();
         return it->second;
     }
@@ -41,12 +50,25 @@ public:
     }
 };
 
+BOOST_AUTO_TEST_CASE(Simple)
+{
+    BOOST_TEST(true, "Simple tests for Scheduler.");
+    Scheduler_test *p_sch = new Scheduler_test;
+    BOOST_TEST(p_sch->getPollingListSize() == 0);
+    delete p_sch;
+    std::shared_ptr<Scheduler_test> sp_sch = std::make_shared<Scheduler_test>();
+    BOOST_TEST(sp_sch->getPollingListSize() == 0, "List is expected to be empty");
+    BOOST_TEST(sp_sch->getNextTimedSensor() == nullptr);
+}
+
 BOOST_AUTO_TEST_CASE(Scheduler_test_Test)
 {
 	Scheduler_test readTimer ;
 
     int check_interval = 50;
     int intervalX = check_interval*1000*1000;
+
+    tMeasurementTime now = getCurrentTime();
 
     BOOST_CHECK_EQUAL(readTimer.getSensorCount(), 0);
     BOOST_CHECK_EQUAL(readTimer.getPollingListSize(), 0);
@@ -77,12 +99,15 @@ BOOST_AUTO_TEST_CASE(Scheduler_test_Test)
     dummyPin.setLocation("Just IO read");
     readTimer.addSensor(&dummyPin);
     BOOST_CHECK_EQUAL(readTimer.getSensorCount(), 6);
+    BOOST_TEST(dummyPin.getName() == "GPIO_read");
 
     Sensor *p_sens = readTimer.getNextTimedSensor();
     cout << "First name in list " << p_sens->getName() << endl;
     BOOST_CHECK_EQUAL(p_sens->getName(), "Temperature_room");
+
+    // Not so usefull to test these time independent routines, but this could be used later.
+    BOOST_TEST((double)(getCurrentTime() - now) <= 1e6, tt::tolerance(1.0));
     tMeasurementTime nextHit = readTimer.getNextLaunchTime();
-    tMeasurementTime now = getCurrentTime();
     cout << "Now " << now << " next " << nextHit << " Diff: " << nextHit - now << endl;
     BOOST_CHECK_EQUAL(compareTimeInMsRange(nextHit, check_interval*1.5), true);
 

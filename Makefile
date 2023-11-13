@@ -14,5 +14,6 @@ prepare:
 	mkdir build/boost_root
 
 run_tests:
-	./build/test/test_unit
-	./build/test/test_unit2
+	./build/test/test_unit --log_level=all
+	./build/test/test_unit2 --log_level=all
+	./build/test/test_unit3 --log_level=all
