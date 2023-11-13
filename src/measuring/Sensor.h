@@ -5,6 +5,7 @@
 #include <string>
 
 #include "Measurement.h"
+#include "config.hpp"
 
 /**
   * class Sensor

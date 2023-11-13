@@ -1,4 +1,5 @@
 #include "GPIO_read.h"
+#include "config.hpp"
 
 #include <iostream>
 
@@ -29,6 +30,13 @@ GPIO_read::~GPIO_read()
 void GPIO_read::executeSensorValueRead()
 {
     cout << "IO read value for " << mTag << " Location " << mLocation << " Pin " << mPinIndex << " PinName " << mPinName << endl;
+    if (simulate_hw)
+    {
+        // Read from file?
+        cout << "Simulation coming" << endl;
+    } else {
+        cout << "Raspberry Pi HW read coming" << endl;
+    }
 }
 
 

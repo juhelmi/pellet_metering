@@ -37,6 +37,7 @@ set(LINUX_USR_LIB_PATH "/usr/lib")  # ${LINUX_USR_LIB_PATH}
 find_library(PIGPIO_LIBRARY PATHS libpi-gpio.so HINTS /usr/local/lib)
 if(PIGPIO_LIBRARY)
     message("Pi-gpio found, cmake running in Raspberry Pi with needed library")
+    set(SIMULATION  false)
 else()
     message("HW library not found libpi-gpio and simulation for HW will be option.")
 endif()

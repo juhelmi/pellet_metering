@@ -1,4 +1,7 @@
 #include "BME280_sensor.h"
+#include <iostream>
+
+using namespace std;
 
 // Constructors/Destructors
 //  
@@ -35,6 +38,11 @@ void BME280_sensor::setWorkingMode()
 
 double BME280_sensor::getTemperature()
 {
+  if (simulate_hw)
+  {
+    cout << "Simulation coming" << endl;
+  } else {
+  }
   return 0;
 }
 
