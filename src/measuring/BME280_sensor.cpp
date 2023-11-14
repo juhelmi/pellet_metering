@@ -1,15 +1,19 @@
 #include "BME280_sensor.h"
 #include <iostream>
 
+#include "config.hpp"
+
 using namespace std;
 
 // Constructors/Destructors
 //  
 
+bool BME280_sensor::mHwDriverInitialized = false;
+
 BME280_sensor::BME280_sensor(int pollingInterval, int bus, int address) : Sensor(pollingInterval), I2C_sensor(pollingInterval, bus, address)
 {
   this->mTag = "BME280_sensor";
-  initAttributes();
+  // Initialize HW driver later as it might fail.
 }
 
 BME280_sensor::~BME280_sensor()
@@ -30,6 +34,9 @@ BME280_sensor::~BME280_sensor()
 
 void BME280_sensor::initAttributes()
 {
+  if (!mHwDriverInitialized)
+  {
+  }
 }
 
 void BME280_sensor::setWorkingMode()

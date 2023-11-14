@@ -2,6 +2,14 @@
 #ifndef GPIO_READ_H
 #define GPIO_READ_H
 
+#if SIMULATE_HW == false
+
+#include <pi-gpio.h>
+
+#else
+
+#endif
+
 #include "GPIO_control.h"
 #include "Sensor.h"
 
@@ -62,6 +70,9 @@ protected:
   //  
   int mPinIndex;  // Raspberry Pi 4B values in range 0..27
   std::string mPinName;
+  int mPinValue;
+  int mLastReadFunction;
+  int mPullUpDn;
 
   // Protected attributes
   //  

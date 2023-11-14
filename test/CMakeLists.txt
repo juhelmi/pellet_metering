@@ -20,9 +20,9 @@ add_executable(test_unit3
     testScheduler.cpp
 )
 
-target_link_libraries(test_unit Boost::unit_test_framework ${LIBRARY_NAME} ${MEASURING_NAME} )
-target_link_libraries(test_unit2 Boost::unit_test_framework ${LIBRARY_NAME} ${MEASURING_NAME} )
-target_link_libraries(test_unit3 Boost::unit_test_framework ${LIBRARY_NAME} ${MEASURING_NAME} )
+target_link_libraries(test_unit Boost::unit_test_framework ${LIBRARY_NAME} ${MEASURING_NAME} ${PIGPIO_LIBRARY} ${BME280_LIBRARY_NAME} )
+target_link_libraries(test_unit2 Boost::unit_test_framework ${LIBRARY_NAME} ${MEASURING_NAME} ${PIGPIO_LIBRARY} ${BME280_LIBRARY_NAME} )
+target_link_libraries(test_unit3 Boost::unit_test_framework ${LIBRARY_NAME} ${MEASURING_NAME} ${PIGPIO_LIBRARY} ${BME280_LIBRARY_NAME} )
 
 add_test(
   NAME
@@ -39,5 +39,9 @@ target_link_libraries(testTheTester
   Boost::unit_test_framework
   )
 endif()
+
+# Features to be ckecked later
+# Last comments in to be taken to use.
+# https://stackoverflow.com/questions/57777071/use-several-test-files-with-boost-test-and-modern-cmake
 
 message("End of test part")

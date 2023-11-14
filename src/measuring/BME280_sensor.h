@@ -3,6 +3,7 @@
 #define BME280_SENSOR_H
 
 #include "I2C_sensor.h"
+#include "bme280.h"
 
 #include <string>
 
@@ -32,8 +33,10 @@ public:
   // Static Public attributes
   //  
 
+
   // Public attributes
   //  
+  void initAttributes();  // This might fail when no permission to open driver or other reason.
 
 
   // Public attribute accessor methods
@@ -71,6 +74,7 @@ public:
 protected:
   // Static Protected attributes
   //  
+  static bool mHwDriverInitialized;
 
   // Protected attributes
   //  
@@ -132,8 +136,6 @@ private:
   {
     return 0;
   }
-
-  void initAttributes();
 
 };
 

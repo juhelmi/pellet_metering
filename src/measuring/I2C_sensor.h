@@ -27,6 +27,7 @@ protected:
   int mBus;
   int mAddress;
   std::string   mDevName;
+  static const int mMaxBus = 5;
 
 public:
   // Constructors/Destructors

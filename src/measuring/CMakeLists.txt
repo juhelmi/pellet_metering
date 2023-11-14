@@ -39,4 +39,5 @@ include_directories("${CMAKE_SOURCE_DIR}/external/taglib/taglib"
   )
 
 # Pointer to json include also
-include_directories(  "${CMAKE_SOURCE_DIR}/external/json/include")
+include_directories(  "${CMAKE_SOURCE_DIR}/external/json/include"
+    "${CMAKE_SOURCE_DIR}/external/BME280_driver")

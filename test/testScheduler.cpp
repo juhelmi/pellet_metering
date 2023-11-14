@@ -50,8 +50,14 @@ public:
     }
 };
 
+BOOST_AUTO_TEST_SUITE(testScheduler)
+
 BOOST_AUTO_TEST_CASE(Simple)
 {
+#if SIMULATE_HW == false
+    cout << "GPIO setup" << endl;
+    setup();
+#endif
     BOOST_TEST(true, "Simple tests for Scheduler.");
     Scheduler_test *p_sch = new Scheduler_test;
     BOOST_TEST(p_sch->getPollingListSize() == 0);
@@ -59,12 +65,20 @@ BOOST_AUTO_TEST_CASE(Simple)
     std::shared_ptr<Scheduler_test> sp_sch = std::make_shared<Scheduler_test>();
     BOOST_TEST(sp_sch->getPollingListSize() == 0, "List is expected to be empty");
     BOOST_TEST(sp_sch->getNextTimedSensor() == nullptr);
+#if SIMULATE_HW == false
+    //cout << "GPIO cleanup" << endl;
+    //cleanup();
+#endif
 }
 
 BOOST_AUTO_TEST_CASE(Scheduler_test_Test)
 {
 	Scheduler_test readTimer ;
 
+#if SIMULATE_HW == false
+    cout << "GPIO setup" << endl;
+    setup(); // duplicate call do not reinitialize
+#endif
     int check_interval = 50;
     int intervalX = check_interval*1000*1000;
 
@@ -119,4 +133,6 @@ BOOST_AUTO_TEST_CASE(Scheduler_test_Test)
         usleep(check_interval/2*1000);
     }
 }
+
+BOOST_AUTO_TEST_SUITE_END() // testScheduler
 

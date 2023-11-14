@@ -8,5 +8,7 @@ target_link_libraries(${EXECUTABLE_NAME} PUBLIC
     ${MEASURING_NAME}
     nlohmann_json
     ${Boost_LIBRARIES}
+    ${PIGPIO_LIBRARY}
+    ${BME280_LIBRARY_NAME}
     )
 
