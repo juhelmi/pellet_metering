@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD          17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS        OFF)
 
-set(SIMULATION  true)
+#set(SIMULATION  true)
 # set(SIMULATION  false)
 
 set(LIBRARY_NAME Library)
@@ -33,13 +33,15 @@ INCLUDE_DIRECTORIES( ${Boost_INCLUDE_DIR} )
 
 # https://github.com/joan2937/pigpio/blob/master/util/Findpigpio.cmake
 set(LINUX_USR_LIB_PATH "/usr/lib")  # ${LINUX_USR_LIB_PATH}
+set(PI-GPIO_NAME libpi-gpio.so)
 #find_library(PIGPIO_LIBRARY NAMES libpi-gpio.so HINTS /usr/local/lib)
-find_library(PIGPIO_LIBRARY PATHS libpi-gpio.so HINTS /usr/local/lib)
+find_library(PIGPIO_LIBRARY PATHS ${PI-GPIO_NAME} HINTS /usr/local/lib)
 if(PIGPIO_LIBRARY)
-    message("Pi-gpio found, cmake running in Raspberry Pi with needed library")
+    message("Pi-gpio ${PI-GPIO_NAME} found, cmake running in Raspberry Pi with needed library")
     set(SIMULATION  false)
 else()
-    message("HW library not found libpi-gpio and simulation for HW will be option.")
+    message("HW library ${PI-GPIO_NAME} not found libpi-gpio and simulation for HW will be option.")
+    set(SIMULATION  true)
 endif()
 
 add_subdirectory(configured)
