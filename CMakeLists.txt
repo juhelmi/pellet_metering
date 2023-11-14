@@ -19,7 +19,6 @@ include(AddGitSubmodule)
 # Debug in KDevelop
 set(CMAKE_BUILD_TYPE Debug)
 
-
 add_git_submodule(external/json)
 add_git_submodule(external/BME280_driver)
 
@@ -35,7 +34,7 @@ INCLUDE_DIRECTORIES( ${Boost_INCLUDE_DIR} )
 set(LINUX_USR_LIB_PATH "/usr/lib")  # ${LINUX_USR_LIB_PATH}
 set(PI-GPIO_NAME libpi-gpio.so)
 #find_library(PIGPIO_LIBRARY NAMES libpi-gpio.so HINTS /usr/local/lib)
-find_library(PIGPIO_LIBRARY PATHS ${PI-GPIO_NAME} HINTS /usr/local/lib)
+find_library(PIGPIO_LIBRARY ${PI-GPIO_NAME} HINTS /usr/local/lib )
 if(PIGPIO_LIBRARY)
     message("Pi-gpio ${PI-GPIO_NAME} found, cmake running in Raspberry Pi with needed library")
     set(SIMULATION  false)
