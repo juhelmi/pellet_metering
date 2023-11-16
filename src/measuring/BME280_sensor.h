@@ -3,19 +3,33 @@
 #define BME280_SENSOR_H
 
 #include "I2C_sensor.h"
+extern "C" {
 #include "bme280.h"
+}
 
 #include <string>
+
+struct identifier
+{
+    /* Variable to hold device address */
+    uint8_t dev_addr;
+
+    /* Variable that contains file descriptor */
+    int8_t fd;
+};
 
 
 /**
   * class BME280_sensor
-  * 
+  * Uses BMP280 also with BME280 communication protocol. Requires modifications to bme280 driver.
   */
 
 class BME280_sensor : virtual public I2C_sensor
 {
 public:
+  enum sensor_use_type{eBME_not_set = 0, eBME_tph, eBMP_tp, eBME_tp};
+  enum chip_ids_supported{eBME280_CHIP_ID=BME280_CHIP_ID, eBMP280_CHIP_ID=BMP280_CHIP_ID};
+
   // Constructors/Destructors
   //  
 
@@ -36,21 +50,21 @@ public:
 
   // Public attributes
   //  
-  void initAttributes();  // This might fail when no permission to open driver or other reason.
+  bool initAttributes();  // This might fail when no permission to open driver or other reason.
 
 
   // Public attribute accessor methods
   //  
 
 
-  // Public attribute accessor methods
+  // Public attribute accessor methodssensor_use_type wanted_use
   //  
 
 
 
   /**
    */
-  void setWorkingMode();
+  bool setWorkingMode(sensor_use_type wanted_use);
 
 
   /**
@@ -75,6 +89,9 @@ protected:
   // Static Protected attributes
   //  
   static bool mHwDriverInitialized;
+  sensor_use_type mSensor_use;
+  struct bme280_dev mDev;
+  struct identifier mId;
 
   // Protected attributes
   //  
