@@ -11,8 +11,27 @@ set(CMAKE_CXX_EXTENSIONS        OFF)
 
 set(LIBRARY_NAME Library)
 set(MEASURING_NAME Measuring)
-set(BME280_LIBRARY_NAME Bme280_Lib)
 set(EXECUTABLE_NAME pellets)
+
+# Check environment and simulate if not compiling in Raspberry Pi
+# https://github.com/joan2937/pigpio/blob/master/util/Findpigpio.cmake
+set(LINUX_USR_LIB_PATH "/usr/lib")  # ${LINUX_USR_LIB_PATH}
+set(PI-GPIO_NAME libpi-gpio.so)
+#find_library(PIGPIO_LIBRARY NAMES libpi-gpio.so HINTS /usr/local/lib)
+find_library(PIGPIO_LIBRARY ${PI-GPIO_NAME} HINTS /usr/local/lib )
+if(PIGPIO_LIBRARY)
+    message("Pi-gpio ${PI-GPIO_NAME} found, cmake running in Raspberry Pi with needed library")
+    set(BME280_LIBRARY_NAME Bme280_Lib)
+    set(SIMULATION  false)
+    set(SIMLIBRARY_NAME "")
+else()
+    message("HW library ${PI-GPIO_NAME} not found libpi-gpio and simulation for HW will be option.")
+    set(BME280_LIBRARY_NAME SimBme280_Lib)
+    set(SIMULATION  true)
+    set(PIGPIO_LIBRARY "")
+    set(SIMLIBRARY_NAME HwSimulationLib)
+endif()
+
 
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/")
 include(AddGitSubmodule)
@@ -31,18 +50,6 @@ FIND_PACKAGE( Boost 1.83 COMPONENTS program_options REQUIRED )
 # FIND_PACKAGE( Boost 1.74 COMPONENTS program_options REQUIRED )
 INCLUDE_DIRECTORIES( ${Boost_INCLUDE_DIR} )
 
-# https://github.com/joan2937/pigpio/blob/master/util/Findpigpio.cmake
-set(LINUX_USR_LIB_PATH "/usr/lib")  # ${LINUX_USR_LIB_PATH}
-set(PI-GPIO_NAME libpi-gpio.so)
-#find_library(PIGPIO_LIBRARY NAMES libpi-gpio.so HINTS /usr/local/lib)
-find_library(PIGPIO_LIBRARY ${PI-GPIO_NAME} HINTS /usr/local/lib )
-if(PIGPIO_LIBRARY)
-    message("Pi-gpio ${PI-GPIO_NAME} found, cmake running in Raspberry Pi with needed library")
-    set(SIMULATION  false)
-else()
-    message("HW library ${PI-GPIO_NAME} not found libpi-gpio and simulation for HW will be option.")
-    set(SIMULATION  true)
-endif()
 
 add_subdirectory(configured)
 add_subdirectory(external)

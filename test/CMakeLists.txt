@@ -20,9 +20,9 @@ add_executable(test_unit3
     testScheduler.cpp
 )
 
-target_link_libraries(test_unit Boost::unit_test_framework ${LIBRARY_NAME} ${MEASURING_NAME} ${PIGPIO_LIBRARY} ${BME280_LIBRARY_NAME} )
-target_link_libraries(test_unit2 Boost::unit_test_framework ${LIBRARY_NAME} ${MEASURING_NAME} ${PIGPIO_LIBRARY} ${BME280_LIBRARY_NAME} )
-target_link_libraries(test_unit3 Boost::unit_test_framework ${LIBRARY_NAME} ${MEASURING_NAME} ${PIGPIO_LIBRARY} ${BME280_LIBRARY_NAME} )
+target_link_libraries(test_unit Boost::unit_test_framework ${LIBRARY_NAME} ${MEASURING_NAME} ${SIMLIBRARY_NAME} ${PIGPIO_LIBRARY} ${BME280_LIBRARY_NAME} )
+target_link_libraries(test_unit2 Boost::unit_test_framework ${LIBRARY_NAME} ${MEASURING_NAME} ${SIMLIBRARY_NAME} ${PIGPIO_LIBRARY} ${BME280_LIBRARY_NAME} )
+target_link_libraries(test_unit3 Boost::unit_test_framework ${LIBRARY_NAME} ${MEASURING_NAME} ${SIMLIBRARY_NAME} ${PIGPIO_LIBRARY} ${BME280_LIBRARY_NAME} )
 
 add_test(
   NAME

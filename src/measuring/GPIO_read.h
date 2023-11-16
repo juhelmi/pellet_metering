@@ -2,12 +2,12 @@
 #ifndef GPIO_READ_H
 #define GPIO_READ_H
 
+#include "config.hpp"
+
 #if SIMULATE_HW == false
-
 #include <pi-gpio.h>
-
 #else
-
+#include <pi-gpio.h>
 #endif
 
 #include "GPIO_control.h"

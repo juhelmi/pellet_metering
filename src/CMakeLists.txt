@@ -1,4 +1,6 @@
 add_subdirectory(i2c_routines)
-add_subdirectory(simulation)
+if(${SIMULATION} STREQUAL "true")
+    add_subdirectory(simulation)
+endif()
 add_subdirectory(data_server)
 add_subdirectory(measuring)

@@ -10,5 +10,6 @@ target_link_libraries(${EXECUTABLE_NAME} PUBLIC
     ${Boost_LIBRARIES}
     ${PIGPIO_LIBRARY}
     ${BME280_LIBRARY_NAME}
+    ${SIMLIBRARY_NAME}
     )
 
