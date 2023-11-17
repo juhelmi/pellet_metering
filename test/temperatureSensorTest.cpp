@@ -69,5 +69,8 @@ BOOST_AUTO_TEST_CASE(i2c_check_test)
             //usleep(1*1000);
             usleep(intervalX/2);
         }
+        // Some value should be received
+        BOOST_CHECK_NE(dummyBME.getTemperature(), 0);
+        BOOST_CHECK_NE(dummyBME.getPressure(), 0);
 }
 

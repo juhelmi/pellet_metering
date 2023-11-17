@@ -51,7 +51,7 @@ public:
   // Public attributes
   //  
   bool initAttributes();  // This might fail when no permission to open driver or other reason.
-
+  void executeSensorValueRead() override;
 
   // Public attribute accessor methods
   //  
@@ -94,6 +94,8 @@ protected:
   struct bme280_dev mDev;
   struct identifier mId;
   int8_t mRslt;   // last result in BME280 operation
+  uint32_t mReq_delay;
+  struct bme280_data mComp_data;
 
   // Protected attributes
   //  
@@ -146,7 +148,7 @@ private:
   void setMAddress(int value)
   {
   }
-
+virtual
   /**
    * Get the value of mAddress
    * @return the value of mAddress

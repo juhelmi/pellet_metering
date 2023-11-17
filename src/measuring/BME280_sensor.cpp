@@ -67,7 +67,28 @@ int8_t user_i2c_write(uint8_t reg_addr, const uint8_t *data, uint32_t len, void 
     return BME280_OK;
 }
 
+// Copied routine, to be removed when not needed
+void print_sensor_data(struct bme280_data *comp_data)
+{
+    float temp, press, hum;
 
+#ifdef BME280_DOUBLE_ENABLE
+    temp = comp_data->temperature;
+    press = 0.01 * comp_data->pressure;
+    hum = comp_data->humidity;
+#else
+#ifdef BME280_64BIT_ENABLE
+    temp = 0.01f * comp_data->temperature;
+    press = 0.0001f * comp_data->pressure;
+    hum = 1.0f / 1024.0f * comp_data->humidity;
+#else
+    temp = 0.01f * comp_data->temperature;
+    press = 0.01f * comp_data->pressure;
+    hum = 1.0f / 1024.0f * comp_data->humidity;
+#endif
+#endif
+    printf("%0.2lf deg C, %0.2lf hPa, %0.2lf%%\n", temp, press, hum);
+}
 
 // Constructors/Destructors
 //  
@@ -121,7 +142,7 @@ bool BME280_sensor::initAttributes()
     mId.dev_addr = mAddress;
     if (ioctl(mId.fd, I2C_SLAVE, mId.dev_addr) < 0)
     {
-        fprintf(stderr, "Failed to acquire bus access and/or talk to slave.\n");
+        fprintf(stderr, "Failed to acquire bus access void executeSensorValueRead() override;and/or talk to slave.\n");
         mRslt = BME280_E_DEV_ID_ADDR_FAIL;
         return false;
     }
@@ -146,10 +167,10 @@ bool BME280_sensor::initAttributes()
     struct bme280_settings settings = {0};
 
     /* Variable to store minimum wait time between consecutive measurement in force mode */
-    uint32_t req_delay;
+    //uint32_t req_delay;
 
     /* Structure to get the pressure, temperature and humidity values */
-    struct bme280_data comp_data;
+    // struct bme280_data comp_data;
 
     /* Get the current sensor settings */
     mRslt = bme280_get_sensor_settings(&settings, &mDev);
@@ -177,10 +198,51 @@ bool BME280_sensor::initAttributes()
 
     /*Calculate the minimum delay required between consecutive measurement based upon the sensor enabled
      *  and the oversampling configuration. */
-    bme280_cal_meas_delay(&req_delay, &settings);
+    bme280_cal_meas_delay(&mReq_delay, &settings);
 
   }
   return false;
+}
+
+
+void BME280_sensor::executeSensorValueRead()
+{
+  cout << ("Temperature, Pressure, Humidity\n");
+    /* Set the sensor to forced mode */
+  mRslt = bme280_set_sensor_mode(BME280_POWERMODE_FORCED, &mDev);
+  if (mRslt != BME280_OK)
+  {
+      fprintf(stderr, "Failed to set sensor mode (code %+d).", mRslt);
+      return;
+  }
+
+  /* Wait for the measurement to complete and print data */
+  mDev.delay_us(mReq_delay, mDev.intf_ptr);
+  mRslt = bme280_get_sensor_data(BME280_ALL, &mComp_data, &mDev);
+  if (mRslt != BME280_OK)
+  {
+      fprintf(stderr, "Failed to get sensor data (code %+d).", mRslt);
+      return;
+  }
+
+#if 0
+  #ifdef BME280_DOUBLE_ENABLE
+    temp = comp_data->temperature;
+    press = 0.01 * comp_data->pressure;
+    hum = comp_data->humidity;
+#else
+#ifdef BME280_64BIT_ENABLE
+    temp = 0.01f * comp_data->temperature;
+    press = 0.0001f * comp_data->pressure;
+    hum = 1.0f / 1024.0f * comp_data->humidity;
+#else
+    temp = 0.01f * comp_data->temperature;
+    press = 0.01f * comp_data->pressure;
+    hum = 1.0f / 1024.0f * comp_data->humidity;
+#endif
+#endif
+#endif
+  print_sensor_data(&mComp_data);
 }
 
 bool BME280_sensor::setWorkingMode(sensor_use_type wanted_use)
@@ -204,17 +266,24 @@ int BME280_sensor::getLastBmeErrorCode()
 
 double BME280_sensor::getTemperature()
 {
-  if (simulate_hw)
-  {
-    cout << "Simulation coming" << endl;
-  } else {
-  }
-  return 0;
+  #ifdef BME280_DOUBLE_ENABLE
+    return mComp_data.temperature;
+#else
+#ifdef BME280_64BIT_ENABLE
+    temp = 0.01f * comp_data->temperature;
+    press = 0.0001f * comp_data->pressure;
+    hum = 1.0f / 1024.0f * comp_data->humidity;
+#else
+    temp = 0.01f * comp_data->temperature;
+    press = 0.01f * comp_data->pressure;
+    hum = 1.0f / 1024.0f * comp_data->humidity;
+#endif
+#endif
 }
 
 double BME280_sensor::getPressure()
 {
-  return 0;
+    return 0.01 * mComp_data.pressure;
 }
 
 double BME280_sensor::getHumidity()
@@ -225,7 +294,7 @@ double BME280_sensor::getHumidity()
     case eBME_not_set:
       return 0;
     case eBME_tph:
-      return 0;
+      return mComp_data.humidity;
     case eBMP_tp:
       // not available on this chip
       return 0;
