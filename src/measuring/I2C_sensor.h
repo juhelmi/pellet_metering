@@ -64,7 +64,7 @@ public:
   // Public attribute accessor methods
   //  
 
-  void executeSensorValueRead() override;
+  virtual void executeSensorValueRead() override;
 
 
   /**

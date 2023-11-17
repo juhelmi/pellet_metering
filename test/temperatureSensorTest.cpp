@@ -42,52 +42,32 @@ public:
     }
 };
 
-#if 1
 BOOST_AUTO_TEST_CASE(i2c_check_test)
 {
 	Scheduler readTimer ;
 
-        int intervalX = 100*1000;
+        int intervalX = 1*1000*1000;
         I2C_sensor_test statusCheck(intervalX, 0,0);
 
         BOOST_CHECK_EQUAL(statusCheck.getAllUsedCount(), 1);
         BOOST_CHECK_EQUAL(statusCheck.isUsed(2,3), false);
-        Temperature_room dummyTemp(1*intervalX, 2, 3);
+        BME280_sensor dummyBME(4+1*intervalX, 1,0x76);
         BOOST_CHECK_EQUAL(statusCheck.getAllUsedCount(), 2);
-        BOOST_CHECK_EQUAL(statusCheck.isUsed(2,3), true);
-        Air_pressure dummyPressure(2*intervalX, 2,3);
-        BME280_sensor dummyBME(4+1*intervalX, 4,0x77);
-        BOOST_CHECK_EQUAL(statusCheck.getAllUsedCount(), 4);
 
-        Temperature_room temp2(intervalX, 3, 3);
-        Air_pressure press2(2*intervalX, 3, 3);
-        BOOST_CHECK_EQUAL(statusCheck.getAllUsedCount(), 6);
-        BOOST_CHECK_EQUAL(statusCheck.getMapSize(), 4);
+        BOOST_CHECK_EQUAL(statusCheck.getMapSize(), 2);
 
-        readTimer.addSensor(&dummyTemp);
-        readTimer.addSensor(&dummyPressure);
+        // Set extra settings for BME280
+        dummyBME.setWorkingMode(BME280_sensor::eBME_tph);
+        BOOST_CHECK_EQUAL(dummyBME.getLastBmeErrorCode(), BME280_OK);
+
         readTimer.addSensor(&dummyBME);
 
         for (int i=0; i<2; i++)
         {
             readTimer.pollTimedSensors();
+            BOOST_CHECK_EQUAL(dummyBME.getLastBmeErrorCode(), BME280_OK);
             //usleep(1*1000);
-            usleep(10);
+            usleep(intervalX/2);
         }
 }
-#else
-BOOST_AUTO_TEST_CASE(i2c_check_test)
-{
-	list<int> i_list;
-	cout << "Boost test study i2c" << endl;
-	i_list.push_back(1);
-    BOOST_CHECK_EQUAL(i_list.size(), 1);
-	i_list.push_back(2);
-    BOOST_CHECK_EQUAL(i_list.back(), 2);
-	i_list.push_front(3);
-	BOOST_REQUIRE(i_list.front() == 3);
-	BOOST_REQUIRE(i_list.back() == 2);
-	BOOST_REQUIRE(i_list.size() > 2);
-}
-#endif
 

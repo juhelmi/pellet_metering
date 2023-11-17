@@ -65,6 +65,7 @@ public:
   /**
    */
   bool setWorkingMode(sensor_use_type wanted_use);
+  int getLastBmeErrorCode();
 
 
   /**
@@ -92,6 +93,7 @@ protected:
   sensor_use_type mSensor_use;
   struct bme280_dev mDev;
   struct identifier mId;
+  int8_t mRslt;   // last result in BME280 operation
 
   // Protected attributes
   //  

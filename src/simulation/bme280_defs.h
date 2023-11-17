@@ -133,6 +133,7 @@
 #define BME280_W_INVALID_OSR_MACRO                INT8_C(1)
 
 /*! @name BME280 chip identifier */
+#define BMP280_CHIP_ID                            UINT8_C(0x58)
 #define BME280_CHIP_ID                            UINT8_C(0x60)
 
 /*! @name I2C addresses */
