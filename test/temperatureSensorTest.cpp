@@ -51,26 +51,34 @@ BOOST_AUTO_TEST_CASE(i2c_check_test)
 
         BOOST_CHECK_EQUAL(statusCheck.getAllUsedCount(), 1);
         BOOST_CHECK_EQUAL(statusCheck.isUsed(2,3), false);
-        BME280_sensor dummyBME(4+1*intervalX, 1,0x76);
-        BOOST_CHECK_EQUAL(statusCheck.getAllUsedCount(), 2);
+        BME280_sensor devBME(4+1*intervalX, 1, 0x76);
+        BME280_sensor devBMP(4+1*intervalX, 1, 0x77);
+        BOOST_CHECK_EQUAL(statusCheck.getAllUsedCount(), 3);
 
-        BOOST_CHECK_EQUAL(statusCheck.getMapSize(), 2);
+        BOOST_CHECK_EQUAL(statusCheck.getMapSize(), 3);
 
         // Set extra settings for BME280
-        dummyBME.setWorkingMode(BME280_sensor::eBME_tph);
-        BOOST_CHECK_EQUAL(dummyBME.getLastBmeErrorCode(), BME280_OK);
+        devBME.setWorkingMode(BME280_sensor::eBME_tph);
+        devBMP.setWorkingMode(BME280_sensor::eBMP_tp);
+        BOOST_CHECK_EQUAL(devBME.getLastBmeErrorCode(), BME280_OK);
+        BOOST_CHECK_EQUAL(devBMP.getLastBmeErrorCode(), BME280_OK);
 
-        readTimer.addSensor(&dummyBME);
+        readTimer.addSensor(&devBME);
+        readTimer.addSensor(&devBMP);
 
         for (int i=0; i<2; i++)
         {
             readTimer.pollTimedSensors();
-            BOOST_CHECK_EQUAL(dummyBME.getLastBmeErrorCode(), BME280_OK);
+            BOOST_CHECK_EQUAL(devBME.getLastBmeErrorCode(), BME280_OK);
             //usleep(1*1000);
             usleep(intervalX/2);
         }
         // Some value should be received
-        BOOST_CHECK_NE(dummyBME.getTemperature(), 0);
-        BOOST_CHECK_NE(dummyBME.getPressure(), 0);
+        BOOST_CHECK_NE(devBME.getTemperature(), 0);
+        BOOST_CHECK_NE(devBME.getPressure(), 0);
+        BOOST_CHECK_NE(devBME.getHumidity(), 0);
+        BOOST_CHECK_NE(devBMP.getTemperature(), 0);
+        BOOST_CHECK_NE(devBMP.getPressure(), 0);
+        BOOST_CHECK_EQUAL(devBMP.getHumidity(), 0);
 }
 

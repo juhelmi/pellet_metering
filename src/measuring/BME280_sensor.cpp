@@ -100,6 +100,7 @@ BME280_sensor::BME280_sensor(int pollingInterval, int bus, int address) : Sensor
   mTag = "BME280_sensor";
   mSensor_use = eBME_not_set;
   mRslt = BME280_OK;
+  mComp_data = {0};
   // Initialize HW driver later as it might fail.
 }
 
@@ -185,7 +186,7 @@ bool BME280_sensor::initAttributes()
     settings.filter = BME280_FILTER_COEFF_16;
     settings.osr_h = BME280_OVERSAMPLING_1X;
     settings.osr_p = BME280_OVERSAMPLING_16X;
-    settings.osr_t = BME280_OVERSAMPLING_2X;
+    settings.osr_t = BME280_OVERSAMPLING_4X;
 
     /* Set the sensor settings */
     mRslt = bme280_set_sensor_settings(BME280_SEL_ALL_SETTINGS, &settings, &mDev);
@@ -201,7 +202,7 @@ bool BME280_sensor::initAttributes()
     bme280_cal_meas_delay(&mReq_delay, &settings);
 
   }
-  return false;
+  return true;
 }
 
 
@@ -288,6 +289,7 @@ double BME280_sensor::getPressure()
 
 double BME280_sensor::getHumidity()
 {
+  cout << "Humidity value is " << mComp_data.humidity << " mode " << mSensor_use << endl;
   switch (mSensor_use )
   {
     default:
