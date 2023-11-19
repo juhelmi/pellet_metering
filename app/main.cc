@@ -50,9 +50,11 @@ int main(int argc, char *argv[])
 
         int intervalX = 10000;
 
+        BME280_sensor bmeHw(intervalX, 1, 0x76);
+
         I2C_sensor  dummyI2C(intervalX, 0, 0);
         ADC_sensor dummyADC(1*intervalX, 1,2);
-        Air_pressure dummyPressure(2*intervalX, 2,3);
+        Air_pressure dummyPressure(&bmeHw, 2*intervalX, 1, 0x76);
         BME280_sensor dummyBME(4+1*intervalX, 4,0x77);
 
         readTimer.addSensor(&dummyADC);

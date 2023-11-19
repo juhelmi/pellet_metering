@@ -86,15 +86,19 @@ BOOST_AUTO_TEST_CASE(Scheduler_test_Test)
 
     BOOST_CHECK_EQUAL(readTimer.getSensorCount(), 0);
     BOOST_CHECK_EQUAL(readTimer.getPollingListSize(), 0);
-    Temperature_room dummyTemp(9*intervalX/5, 2, 3);
+
+    BME280_sensor bmeHw1(intervalX, 1, 0x76);
+    BME280_sensor bmeHw2(intervalX, 1, 0x77);
+
+    Temperature_room dummyTemp(&bmeHw1, intervalX/5, 2, 3);
     dummyTemp.setLocation("Out door");
-    Air_pressure dummyPressure(9*intervalX/4, 2,3);
+    Air_pressure dummyPressure(&bmeHw1, 9*intervalX/4, 2,3);
     dummyPressure.setLocation("Out door");
     BME280_sensor dummyBME(4+4*intervalX, 4,0x77);
 
-    Temperature_room temp2(3*intervalX/2, 3, 3);
+    Temperature_room temp2(&bmeHw2, 3*intervalX/2, 1, 0x77);
     temp2.setLocation("Storage");
-    Air_pressure press2(2*intervalX, 3, 3);
+    Air_pressure press2(&bmeHw2, 2*intervalX, 3, 3);
     press2.setLocation("Storage");
 
     BOOST_CHECK_EQUAL(readTimer.getSensorCount(), 0);

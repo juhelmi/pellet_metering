@@ -28,9 +28,10 @@ BOOST_AUTO_TEST_CASE(scheduling_basics)
 	Scheduler readTimer ;
 
         int intervalX = 10000;
+        BME280_sensor bmeHw(intervalX, 1, 0x76);
 
         ADC_sensor dummyADC(1*intervalX, 1,2);
-        Air_pressure dummyPressure(2*intervalX, 2,3);
+        Air_pressure dummyPressure(&bmeHw, 4*intervalX, 2,3);
         BME280_sensor dummyBME(4+1*intervalX, 4,0x77);
 
         readTimer.addSensor(&dummyADC);

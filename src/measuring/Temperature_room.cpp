@@ -6,9 +6,10 @@ using namespace std;
 // Constructors/Destructors
 //  
 
-Temperature_room::Temperature_room(int pollingInterval, int bus, int address) : Sensor(pollingInterval), I2C_sensor(pollingInterval, bus, address)
+Temperature_room::Temperature_room(I2C_sensor* hwSensor, int  pollingInterval, int bus, int address) :
+Sensor(pollingInterval),
+I2C_Logical_Sensor(hwSensor, pollingInterval, bus, address)
 {
-  mRealSensor = 0;
   initAttributes();
   mTag = "Temperature_room";
 }

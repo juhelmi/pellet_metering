@@ -165,3 +165,15 @@ void I2C_sensor::removeThisSensor(int port, int address)
 {
   mAllSensorCount--;
 }
+
+I2C_Logical_Sensor::I2C_Logical_Sensor(I2C_sensor* hwSensor, int pollingInterval, int bus, int address) :
+mHWSensor(hwSensor), mBus(bus), mAddress(address)
+{
+  cout << "Logical sensor " << hwSensor->getName() << " created\n";
+}
+
+I2C_Logical_Sensor::~I2C_Logical_Sensor() noexcept
+{
+}
+
+

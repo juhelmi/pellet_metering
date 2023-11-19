@@ -21,6 +21,8 @@ namespace utf = boost::unit_test;
 namespace tt = boost::test_tools;
 
 // https://www.boost.org/doc/libs/1_83_0/libs/test/doc/html/boost_test/utf_reference.html
+// Instruction to run tests by name
+// https://www.boost.org/doc/libs/1_83_0/libs/test/doc/html/boost_test/runtime_config/test_unit_filtering.html
 
 class I2C_sensor_test : public I2C_sensor
 {
@@ -82,3 +84,19 @@ BOOST_AUTO_TEST_CASE(i2c_check_test)
         BOOST_CHECK_EQUAL(devBMP.getHumidity(), 0);
 }
 
+BOOST_AUTO_TEST_CASE(device_share_test)
+{
+    Scheduler readTimer ;
+    int intervalX = 1*1000*1000;
+
+    I2C_sensor_test statusCheck(intervalX, 0,0);
+
+    BME280_sensor bme1(intervalX, 1, 0x76);
+
+    Air_pressure devAP(&bme1, intervalX, 2, 2);
+    Temperature_room devTemp(&bme1, intervalX, 2, 2);
+    BOOST_CHECK_EQUAL(statusCheck.getAllUsedCount(), 2);
+
+    readTimer.addSensor(&devAP);
+    readTimer.addSensor(&devTemp);
+}

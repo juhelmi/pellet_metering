@@ -3,6 +3,7 @@
 #define AIR_PRESSURE_H
 
 #include "I2C_sensor.h"
+#include "BME280_sensor.h"
 
 
 /**
@@ -10,7 +11,7 @@
   * 
   */
 
-class Air_pressure : virtual public I2C_sensor
+class Air_pressure : virtual public I2C_Logical_Sensor
 {
 public:
   // Constructors/Destructors
@@ -20,7 +21,7 @@ public:
   /**
    * Empty Constructor
    */
-  Air_pressure(int pollingInterval, int bus, int address);
+  Air_pressure(I2C_sensor* hwSensor, int pollingInterval, int bus, int address);
 
   /**
    * Empty Destructor
@@ -57,7 +58,6 @@ protected:
 
   // Protected attributes
   //  
-
 
   // Protected attribute accessor methods
   //  

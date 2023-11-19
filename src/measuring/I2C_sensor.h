@@ -8,7 +8,7 @@
 #include <map>
 #include <memory>
 #include <boost/ref.hpp>
-
+#include <list>
 
 /**
   * class I2C_sensor
@@ -91,6 +91,8 @@ protected:
   // Typically Sensor objects are not created with new. No shared_ptr is needed and no delete is need to call directly.
   //static std::map<std::pair<int,int>, std::shared_ptr<I2C_sensor> > mMapOfActiveSensors;
   static std::map<std::pair<int,int>, I2C_sensor*> mMapOfActiveSensors;
+  // Sensor knows it's own childs for pair<bus, address>
+  std::list<Sensor*> mSensorsAtSameAddress;
 
   // Protected attributes
   //  
@@ -149,6 +151,21 @@ private:
 
   void initAttributes();
 
+};
+
+class I2C_Logical_Sensor : virtual public Sensor
+{
+public:
+  I2C_Logical_Sensor(I2C_sensor* hwSensor, int pollingInterval, int bus, int address);
+  virtual ~I2C_Logical_Sensor();
+
+  // Value reading operation is overriden in next level where actual sensor type is known.
+  // void executeSensorValueRead() override;
+
+protected:
+  I2C_sensor* mHWSensor;    // Actual sensor that has multiple parameters to read.
+  int mBus;
+  int mAddress;
 };
 
 #endif // I2C_SENSOR_H

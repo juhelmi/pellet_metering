@@ -14,10 +14,10 @@
   * 
   */
 
-class Temperature_room : virtual public I2C_sensor
+class Temperature_room : virtual public I2C_Logical_Sensor
 {
-private:
-  BME280_sensor *mRealSensor;
+protected:
+  //BME280_sensor *mRealSensor;
 
 public:
   // Constructors/Destructors
@@ -27,7 +27,7 @@ public:
   /**
    * Empty Constructor
    */
-  Temperature_room(int pollingInterval, int bus, int address);
+  Temperature_room(I2C_sensor* hwSensor, int pollingInterval, int bus, int address);
 
   /**
    * Empty Destructor
