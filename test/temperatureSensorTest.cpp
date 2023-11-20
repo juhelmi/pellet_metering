@@ -97,11 +97,23 @@ BOOST_AUTO_TEST_CASE(device_share_test)
     BOOST_CHECK_EQUAL(statusCheck.getAllUsedCount(), 1);
 
     BME280_sensor bme1(intervalX, 1, 0x76);
+    bme1.setWorkingMode(BME280_sensor::eBME_tph);
 
-    Air_pressure devAP(&bme1, intervalX, 2, 2);
-    Temperature_room devTemp(&bme1, intervalX, 2, 2);
+    Air_pressure devAP(&bme1, intervalX, 1, 0x76);
+    Temperature_room devTemp(&bme1, intervalX, 1, 0x76);
     BOOST_CHECK_EQUAL(statusCheck.getAllUsedCount(), 2);
 
     readTimer.addSensor(&devAP);
     readTimer.addSensor(&devTemp);
+
+    cout << "Loop\n";
+    for (int i=0; i<2; i++)
+    {
+        readTimer.pollTimedSensors();
+        BOOST_CHECK_EQUAL(bme1.getLastBmeErrorCode(), BME280_OK);
+        //usleep(1*1000);
+        usleep(intervalX/2);
+    }
+    cout << "Air_pressure " << devAP.getPressure() << endl;
+    cout << "Temperature " << devTemp.getTemperature() << endl;
 }

@@ -8,6 +8,9 @@
 
 #include <string>
 
+#include <iostream>
+
+using namespace std;
 
 /**
   * class Temperature_room
@@ -52,15 +55,13 @@ public:
 
   double getValue()
   {
+    cout << "Logical Temp " << endl;
     return getTemperature();
   }
   /**
    * @return double
    */
-  double getTemperature()
-  {
-    return 0;
-  }
+  double getTemperature();
 
 
   /**

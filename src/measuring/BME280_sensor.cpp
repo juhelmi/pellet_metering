@@ -208,6 +208,11 @@ bool BME280_sensor::initAttributes()
 
 void BME280_sensor::executeSensorValueRead()
 {
+  if (mSensor_use == BME280_sensor::eBME_not_set)
+  {
+    cout << "Working mode not set " << endl;
+    return;
+  }
   cout << ("Temperature, Pressure, Humidity\n");
     /* Set the sensor to forced mode */
   mRslt = bme280_set_sensor_mode(BME280_POWERMODE_FORCED, &mDev);

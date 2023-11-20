@@ -41,3 +41,21 @@ void Temperature_room::executeSensorValueRead()
   cout << "Room temperature read for " << mTag << " Bus " << mBus << " Location " << mLocation << " Value " << getValue() << endl;
 }
 
+double Temperature_room::getTemperature()
+{
+  if (typeid(*mHWSensor) == typeid(BME280_sensor))
+  {
+    BME280_sensor* pBME = dynamic_cast<BME280_sensor*>(mHWSensor);
+    if (pBME->getLastBmeErrorCode() != 0)
+    {
+      cout << "Error\n";
+      mConfigurationOk = false;
+    }
+    if (mConfigurationOk)
+    {
+      return pBME->getTemperature();
+    }
+  } else {
+  }
+  return 0;
+}
