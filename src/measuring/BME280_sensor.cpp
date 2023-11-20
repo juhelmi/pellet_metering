@@ -217,7 +217,7 @@ void BME280_sensor::executeSensorValueRead()
       return;
   }
 
-#ifdef SIMULATE_HW
+#if SIMULATE_HW == true
   mComp_data.humidity = 45.6789;
   mComp_data.pressure = 987.6543;
   mComp_data.temperature = 23.456;
