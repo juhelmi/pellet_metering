@@ -1,4 +1,7 @@
 #include "Air_pressure.h"
+#include <iostream>
+
+using namespace std;
 
 // Constructors/Destructors
 //  
@@ -30,5 +33,10 @@ Air_pressure::~Air_pressure()
 void Air_pressure::initAttributes()
 {
   repeatedHwRead = 0;
+}
+
+void Air_pressure::executeSensorValueRead()
+{
+  cout << "Air pressure read for " << mTag << " Bus " << mBus << " Location " << mLocation << " Value " << getValue() << endl;
 }
 

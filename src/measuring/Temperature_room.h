@@ -50,6 +50,10 @@ public:
 
   void executeSensorValueRead() override;
 
+  double getValue()
+  {
+    return getTemperature();
+  }
   /**
    * @return double
    */

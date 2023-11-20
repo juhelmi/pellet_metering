@@ -413,32 +413,9 @@ static uint32_t compensate_humidity(const struct bme280_uncomp_data *uncomp_data
 int8_t bme280_init(struct bme280_dev *dev)
 {
     int8_t rslt;
-    uint8_t chip_id = 0;
-
-    /* Read the chip-id of bme280 sensor */
-    rslt = bme280_get_regs(BME280_REG_CHIP_ID, &chip_id, 1, dev);
-
-    /* Check for chip id validity */
-    if (rslt == BME280_OK)
-    {
-        if (chip_id == BME280_CHIP_ID)
-        {
-            dev->chip_id = chip_id;
-
-            /* Reset the sensor */
-            rslt = bme280_soft_reset(dev);
-
-            if (rslt == BME280_OK)
-            {
-                /* Read the calibration data */
-                rslt = get_calib_data(dev);
-            }
-        }
-        else
         {
             rslt = BME280_E_DEV_NOT_FOUND;
         }
-    }
 
     return rslt;
 }
@@ -455,17 +432,6 @@ int8_t bme280_get_regs(uint8_t reg_addr, uint8_t *reg_data, uint32_t len, struct
 
     if ((rslt == BME280_OK) && (reg_data != NULL))
     {
-        /* If interface selected is SPI */
-        if (dev->intf != BME280_I2C_INTF)
-        {
-            reg_addr = reg_addr | 0x80;
-        }
-
-        /* Read the data */
-        dev->intf_rslt = dev->read(reg_addr, reg_data, len, dev->intf_ptr);
-
-        /* Check for communication error */
-        if (dev->intf_rslt != BME280_INTF_RET_SUCCESS)
         {
             rslt = BME280_E_COMM_FAIL;
         }
@@ -489,61 +455,10 @@ int8_t bme280_set_regs(uint8_t *reg_addr, const uint8_t *reg_data, uint32_t len,
     uint32_t temp_len;
     uint32_t reg_addr_cnt;
 
-    if (len > BME280_MAX_LEN)
-    {
-        len = BME280_MAX_LEN;
-    }
 
-    /* Check for null pointer in the device structure */
-    rslt = null_ptr_check(dev);
-
-    /* Check for arguments validity */
-    if ((rslt == BME280_OK) && (reg_addr != NULL) && (reg_data != NULL))
-    {
-        if (len != 0)
-        {
-            temp_buff[0] = reg_data[0];
-
-            /* If interface selected is SPI */
-            if (dev->intf != BME280_I2C_INTF)
-            {
-                for (reg_addr_cnt = 0; reg_addr_cnt < len; reg_addr_cnt++)
-                {
-                    reg_addr[reg_addr_cnt] = reg_addr[reg_addr_cnt] & 0x7F;
-                }
-            }
-
-            /* Burst write mode */
-            if (len > 1)
-            {
-                /* Interleave register address w.r.t data for
-                 * burst write
-                 */
-                interleave_reg_addr(reg_addr, temp_buff, reg_data, len);
-                temp_len = ((len * 2) - 1);
-            }
-            else
-            {
-                temp_len = len;
-            }
-
-            dev->intf_rslt = dev->write(reg_addr[0], temp_buff, temp_len, dev->intf_ptr);
-
-            /* Check for communication error */
-            if (dev->intf_rslt != BME280_INTF_RET_SUCCESS)
             {
                 rslt = BME280_E_COMM_FAIL;
             }
-        }
-        else
-        {
-            rslt = BME280_E_INVALID_LEN;
-        }
-    }
-    else
-    {
-        rslt = BME280_E_NULL_PTR;
-    }
 
     return rslt;
 }
@@ -556,41 +471,7 @@ int8_t bme280_set_sensor_settings(uint8_t desired_settings,
                                   const struct bme280_settings *settings,
                                   struct bme280_dev *dev)
 {
-    int8_t rslt;
-    uint8_t sensor_mode;
-
-    if (settings != NULL)
-    {
-        rslt = bme280_get_sensor_mode(&sensor_mode, dev);
-
-        if ((rslt == BME280_OK) && (sensor_mode != BME280_POWERMODE_SLEEP))
-        {
-            rslt = put_device_to_sleep(dev);
-        }
-
-        if (rslt == BME280_OK)
-        {
-            /* Check if user wants to change oversampling
-             * settings
-             */
-            if (are_settings_changed(OVERSAMPLING_SETTINGS, desired_settings))
-            {
-                rslt = set_osr_settings(desired_settings, settings, dev);
-            }
-
-            /* Check if user wants to change filter and/or
-             * standby settings
-             */
-            if ((rslt == BME280_OK) && are_settings_changed(FILTER_STANDBY_SETTINGS, desired_settings))
-            {
-                rslt = set_filter_standby_settings(desired_settings, settings, dev);
-            }
-        }
-    }
-    else
-    {
-        rslt = BME280_E_NULL_PTR;
-    }
+    int8_t rslt = -1;
 
     return rslt;
 }
@@ -604,16 +485,6 @@ int8_t bme280_get_sensor_settings(struct bme280_settings *settings, struct bme28
     int8_t rslt;
     uint8_t reg_data[4];
 
-    if (settings != NULL)
-    {
-        rslt = bme280_get_regs(BME280_REG_CTRL_HUM, reg_data, 4, dev);
-
-        if (rslt == BME280_OK)
-        {
-            parse_device_settings(reg_data, settings);
-        }
-    }
-    else
     {
         rslt = BME280_E_NULL_PTR;
     }
@@ -626,26 +497,7 @@ int8_t bme280_get_sensor_settings(struct bme280_settings *settings, struct bme28
  */
 int8_t bme280_set_sensor_mode(uint8_t sensor_mode, struct bme280_dev *dev)
 {
-    int8_t rslt;
-    uint8_t last_set_mode;
-
-    rslt = bme280_get_sensor_mode(&last_set_mode, dev);
-
-    /* If the sensor is not in sleep mode put the device to sleep
-     * mode
-     */
-    if ((rslt == BME280_OK) && (last_set_mode != BME280_POWERMODE_SLEEP))
-    {
-        rslt = put_device_to_sleep(dev);
-    }
-
-    /* Set the power mode */
-    if (rslt == BME280_OK)
-    {
-        rslt = write_power_mode(sensor_mode, dev);
-    }
-
-    return rslt;
+    return BME280_OK;
 }
 
 /*!
@@ -655,15 +507,6 @@ int8_t bme280_get_sensor_mode(uint8_t *sensor_mode, struct bme280_dev *dev)
 {
     int8_t rslt;
 
-    if (sensor_mode != NULL)
-    {
-        /* Read the power mode register */
-        rslt = bme280_get_regs(BME280_REG_PWR_CTRL, sensor_mode, 1, dev);
-
-        /* Assign the power mode to variable */
-        *sensor_mode = BME280_GET_BITS_POS_0(*sensor_mode, BME280_SENSOR_MODE);
-    }
-    else
     {
         rslt = BME280_E_NULL_PTR;
     }
@@ -676,33 +519,7 @@ int8_t bme280_get_sensor_mode(uint8_t *sensor_mode, struct bme280_dev *dev)
  */
 int8_t bme280_soft_reset(struct bme280_dev *dev)
 {
-    int8_t rslt;
-    uint8_t reg_addr = BME280_REG_RESET;
-    uint8_t status_reg = 0;
-    uint8_t try_run = 5;
-
-    /* 0xB6 is the soft reset command */
-    uint8_t soft_rst_cmd = BME280_SOFT_RESET_COMMAND;
-
-    /* Write the soft reset command in the sensor */
-    rslt = bme280_set_regs(&reg_addr, &soft_rst_cmd, 1, dev);
-
-    if (rslt == BME280_OK)
-    {
-        /* If NVM not copied yet, Wait for NVM to copy */
-        do
-        {
-            /* As per data sheet - Table 1, startup time is 2 ms. */
-            dev->delay_us(BME280_STARTUP_DELAY, dev->intf_ptr);
-            rslt = bme280_get_regs(BME280_REG_STATUS, &status_reg, 1, dev);
-
-        } while ((rslt == BME280_OK) && (try_run--) && (status_reg & BME280_STATUS_IM_UPDATE));
-
-        if (status_reg & BME280_STATUS_IM_UPDATE)
-        {
-            rslt = BME280_E_NVM_COPY_FAILED;
-        }
-    }
+    int8_t rslt = BME280_OK;
 
     return rslt;
 }
@@ -714,34 +531,7 @@ int8_t bme280_soft_reset(struct bme280_dev *dev)
  */
 int8_t bme280_get_sensor_data(uint8_t sensor_comp, struct bme280_data *comp_data, struct bme280_dev *dev)
 {
-    int8_t rslt;
-
-    /* Array to store the pressure, temperature and humidity data read from
-     * the sensor
-     */
-    uint8_t reg_data[BME280_LEN_P_T_H_DATA] = { 0 };
-    struct bme280_uncomp_data uncomp_data = { 0 };
-
-    if (comp_data != NULL)
-    {
-        /* Read the pressure and temperature data from the sensor */
-        rslt = bme280_get_regs(BME280_REG_DATA, reg_data, BME280_LEN_P_T_H_DATA, dev);
-
-        if (rslt == BME280_OK)
-        {
-            /* Parse the read data from the sensor */
-            parse_sensor_data(reg_data, &uncomp_data);
-
-            /* Compensate the pressure and/or temperature and/or
-             * humidity data from the sensor
-             */
-            rslt = bme280_compensate_data(sensor_comp, &uncomp_data, comp_data, &dev->calib_data);
-        }
-    }
-    else
-    {
-        rslt = BME280_E_NULL_PTR;
-    }
+    int8_t rslt = BME280_OK;
 
     return rslt;
 }
@@ -758,37 +548,6 @@ int8_t bme280_compensate_data(uint8_t sensor_comp,
 {
     int8_t rslt = BME280_OK;
 
-    if ((uncomp_data != NULL) && (comp_data != NULL) && (calib_data != NULL))
-    {
-        /* Initialize to zero */
-        comp_data->temperature = 0;
-        comp_data->pressure = 0;
-        comp_data->humidity = 0;
-
-        /* If pressure or temperature component is selected */
-        if (sensor_comp & (BME280_PRESS | BME280_TEMP | BME280_HUM))
-        {
-            /* Compensate the temperature data */
-            comp_data->temperature = compensate_temperature(uncomp_data, calib_data);
-        }
-
-        if (sensor_comp & BME280_PRESS)
-        {
-            /* Compensate the pressure data */
-            comp_data->pressure = compensate_pressure(uncomp_data, calib_data);
-        }
-
-        if (sensor_comp & BME280_HUM)
-        {
-            /* Compensate the humidity data */
-            comp_data->humidity = compensate_humidity(uncomp_data, calib_data);
-        }
-    }
-    else
-    {
-        rslt = BME280_E_NULL_PTR;
-    }
-
     return rslt;
 }
 
@@ -803,48 +562,6 @@ int8_t bme280_cal_meas_delay(uint32_t *max_delay, const struct bme280_settings *
     uint8_t pres_osr;
     uint8_t hum_osr;
 
-    /* Array to map OSR config register value to actual OSR */
-    uint8_t osr_sett_to_act_osr[] = { 0, 1, 2, 4, 8, 16 };
-
-    if ((settings != NULL) && (max_delay != NULL))
-    {
-        /* Mapping osr settings to the actual osr values e.g. 0b101 -> osr X16 */
-        if (settings->osr_t <= BME280_OVERSAMPLING_16X)
-        {
-            temp_osr = osr_sett_to_act_osr[settings->osr_t];
-        }
-        else
-        {
-            temp_osr = BME280_OVERSAMPLING_MAX;
-        }
-
-        if (settings->osr_p <= BME280_OVERSAMPLING_16X)
-        {
-            pres_osr = osr_sett_to_act_osr[settings->osr_p];
-        }
-        else
-        {
-            pres_osr = BME280_OVERSAMPLING_MAX;
-        }
-
-        if (settings->osr_h <= BME280_OVERSAMPLING_16X)
-        {
-            hum_osr = osr_sett_to_act_osr[settings->osr_h];
-        }
-        else
-        {
-            hum_osr = BME280_OVERSAMPLING_MAX;
-        }
-
-        (*max_delay) =
-            (uint32_t)((BME280_MEAS_OFFSET + (BME280_MEAS_DUR * temp_osr) +
-                        ((BME280_MEAS_DUR * pres_osr) + BME280_PRES_HUM_MEAS_OFFSET) +
-                        ((BME280_MEAS_DUR * hum_osr) + BME280_PRES_HUM_MEAS_OFFSET)));
-    }
-    else
-    {
-        rslt = BME280_E_NULL_PTR;
-    }
 
     return rslt;
 }
@@ -860,15 +577,6 @@ static int8_t set_osr_settings(uint8_t desired_settings, const struct bme280_set
 {
     int8_t rslt = BME280_W_INVALID_OSR_MACRO;
 
-    if (desired_settings & BME280_SEL_OSR_HUM)
-    {
-        rslt = set_osr_humidity_settings(settings, dev);
-    }
-
-    if (desired_settings & (BME280_SEL_OSR_PRESS | BME280_SEL_OSR_TEMP))
-    {
-        rslt = set_osr_press_temp_settings(desired_settings, settings, dev);
-    }
 
     return rslt;
 }
@@ -878,29 +586,7 @@ static int8_t set_osr_settings(uint8_t desired_settings, const struct bme280_set
  */
 static int8_t set_osr_humidity_settings(const struct bme280_settings *settings, struct bme280_dev *dev)
 {
-    int8_t rslt;
-    uint8_t ctrl_hum;
-    uint8_t ctrl_meas;
-    uint8_t reg_addr = BME280_REG_CTRL_HUM;
-
-    ctrl_hum = settings->osr_h & BME280_CTRL_HUM_MSK;
-
-    /* Write the humidity control value in the register */
-    rslt = bme280_set_regs(&reg_addr, &ctrl_hum, 1, dev);
-
-    /* Humidity related changes will be only effective after a
-     * write operation to ctrl_meas register
-     */
-    if (rslt == BME280_OK)
-    {
-        reg_addr = BME280_REG_CTRL_MEAS;
-        rslt = bme280_get_regs(reg_addr, &ctrl_meas, 1, dev);
-
-        if (rslt == BME280_OK)
-        {
-            rslt = bme280_set_regs(&reg_addr, &ctrl_meas, 1, dev);
-        }
-    }
+    int8_t rslt = -1;
 
     return rslt;
 }
@@ -913,27 +599,7 @@ static int8_t set_osr_press_temp_settings(uint8_t desired_settings,
                                           const struct bme280_settings *settings,
                                           struct bme280_dev *dev)
 {
-    int8_t rslt;
-    uint8_t reg_addr = BME280_REG_CTRL_MEAS;
-    uint8_t reg_data;
-
-    rslt = bme280_get_regs(reg_addr, &reg_data, 1, dev);
-
-    if (rslt == BME280_OK)
-    {
-        if (desired_settings & BME280_SEL_OSR_PRESS)
-        {
-            fill_osr_press_settings(&reg_data, settings);
-        }
-
-        if (desired_settings & BME280_SEL_OSR_TEMP)
-        {
-            fill_osr_temp_settings(&reg_data, settings);
-        }
-
-        /* Write the oversampling settings in the register */
-        rslt = bme280_set_regs(&reg_addr, &reg_data, 1, dev);
-    }
+    int8_t rslt = -1;
 
     return rslt;
 }
@@ -946,27 +612,7 @@ static int8_t set_filter_standby_settings(uint8_t desired_settings,
                                           const struct bme280_settings *settings,
                                           struct bme280_dev *dev)
 {
-    int8_t rslt;
-    uint8_t reg_addr = BME280_REG_CONFIG;
-    uint8_t reg_data;
-
-    rslt = bme280_get_regs(reg_addr, &reg_data, 1, dev);
-
-    if (rslt == BME280_OK)
-    {
-        if (desired_settings & BME280_SEL_FILTER)
-        {
-            fill_filter_settings(&reg_data, settings);
-        }
-
-        if (desired_settings & BME280_SEL_STANDBY)
-        {
-            fill_standby_settings(&reg_data, settings);
-        }
-
-        /* Write the oversampling settings in the register */
-        rslt = bme280_set_regs(&reg_addr, &reg_data, 1, dev);
-    }
+    int8_t rslt = -1;
 
     return rslt;
 }
@@ -977,7 +623,6 @@ static int8_t set_filter_standby_settings(uint8_t desired_settings,
  */
 static void fill_filter_settings(uint8_t *reg_data, const struct bme280_settings *settings)
 {
-    *reg_data = BME280_SET_BITS(*reg_data, BME280_FILTER, settings->filter);
 }
 
 /*!
@@ -986,7 +631,6 @@ static void fill_filter_settings(uint8_t *reg_data, const struct bme280_settings
  */
 static void fill_standby_settings(uint8_t *reg_data, const struct bme280_settings *settings)
 {
-    *reg_data = BME280_SET_BITS(*reg_data, BME280_STANDBY, settings->standby_time);
 }
 
 /*!
@@ -995,7 +639,6 @@ static void fill_standby_settings(uint8_t *reg_data, const struct bme280_setting
  */
 static void fill_osr_press_settings(uint8_t *reg_data, const struct bme280_settings *settings)
 {
-    *reg_data = BME280_SET_BITS(*reg_data, BME280_CTRL_PRESS, settings->osr_p);
 }
 
 /*!
@@ -1004,7 +647,6 @@ static void fill_osr_press_settings(uint8_t *reg_data, const struct bme280_setti
  */
 static void fill_osr_temp_settings(uint8_t *reg_data, const struct bme280_settings *settings)
 {
-    *reg_data = BME280_SET_BITS(*reg_data, BME280_CTRL_TEMP, settings->osr_t);
 }
 
 /*!
@@ -1014,11 +656,6 @@ static void fill_osr_temp_settings(uint8_t *reg_data, const struct bme280_settin
  */
 static void parse_device_settings(const uint8_t *reg_data, struct bme280_settings *settings)
 {
-    settings->osr_h = BME280_GET_BITS_POS_0(reg_data[0], BME280_CTRL_HUM);
-    settings->osr_p = BME280_GET_BITS(reg_data[2], BME280_CTRL_PRESS);
-    settings->osr_t = BME280_GET_BITS(reg_data[2], BME280_CTRL_TEMP);
-    settings->filter = BME280_GET_BITS(reg_data[3], BME280_FILTER);
-    settings->standby_time = BME280_GET_BITS(reg_data[3], BME280_STANDBY);
 }
 
 /*!
@@ -1027,27 +664,6 @@ static void parse_device_settings(const uint8_t *reg_data, struct bme280_setting
  */
 static void parse_sensor_data(const uint8_t *reg_data, struct bme280_uncomp_data *uncomp_data)
 {
-    /* Variables to store the sensor data */
-    uint32_t data_xlsb;
-    uint32_t data_lsb;
-    uint32_t data_msb;
-
-    /* Store the parsed register values for pressure data */
-    data_msb = (uint32_t)reg_data[0] << BME280_12_BIT_SHIFT;
-    data_lsb = (uint32_t)reg_data[1] << BME280_4_BIT_SHIFT;
-    data_xlsb = (uint32_t)reg_data[2] >> BME280_4_BIT_SHIFT;
-    uncomp_data->pressure = data_msb | data_lsb | data_xlsb;
-
-    /* Store the parsed register values for temperature data */
-    data_msb = (uint32_t)reg_data[3] << BME280_12_BIT_SHIFT;
-    data_lsb = (uint32_t)reg_data[4] << BME280_4_BIT_SHIFT;
-    data_xlsb = (uint32_t)reg_data[5] >> BME280_4_BIT_SHIFT;
-    uncomp_data->temperature = data_msb | data_lsb | data_xlsb;
-
-    /* Store the parsed register values for humidity data */
-    data_msb = (uint32_t)reg_data[6] << BME280_8_BIT_SHIFT;
-    data_lsb = (uint32_t)reg_data[7];
-    uncomp_data->humidity = data_msb | data_lsb;
 }
 
 /*!
@@ -1055,23 +671,7 @@ static void parse_sensor_data(const uint8_t *reg_data, struct bme280_uncomp_data
  */
 static int8_t write_power_mode(uint8_t sensor_mode, struct bme280_dev *dev)
 {
-    int8_t rslt;
-    uint8_t reg_addr = BME280_REG_PWR_CTRL;
-
-    /* Variable to store the value read from power mode register */
-    uint8_t sensor_mode_reg_val;
-
-    /* Read the power mode register */
-    rslt = bme280_get_regs(reg_addr, &sensor_mode_reg_val, 1, dev);
-
-    /* Set the power mode */
-    if (rslt == BME280_OK)
-    {
-        sensor_mode_reg_val = BME280_SET_BITS_POS_0(sensor_mode_reg_val, BME280_SENSOR_MODE, sensor_mode);
-
-        /* Write the power mode in the register */
-        rslt = bme280_set_regs(&reg_addr, &sensor_mode_reg_val, 1, dev);
-    }
+    int8_t rslt = -1;
 
     return rslt;
 }
@@ -1081,23 +681,7 @@ static int8_t write_power_mode(uint8_t sensor_mode, struct bme280_dev *dev)
  */
 static int8_t put_device_to_sleep(struct bme280_dev *dev)
 {
-    int8_t rslt;
-    uint8_t reg_data[4];
-    struct bme280_settings settings;
-
-    rslt = bme280_get_regs(BME280_REG_CTRL_HUM, reg_data, 4, dev);
-
-    if (rslt == BME280_OK)
-    {
-        parse_device_settings(reg_data, &settings);
-        rslt = bme280_soft_reset(dev);
-
-        if (rslt == BME280_OK)
-        {
-            rslt = reload_device_settings(&settings, dev);
-        }
-    }
-
+    int8_t rslt = -1;
     return rslt;
 }
 
@@ -1107,14 +691,7 @@ static int8_t put_device_to_sleep(struct bme280_dev *dev)
  */
 static int8_t reload_device_settings(const struct bme280_settings *settings, struct bme280_dev *dev)
 {
-    int8_t rslt;
-
-    rslt = set_osr_settings(BME280_SEL_ALL_SETTINGS, settings, dev);
-
-    if (rslt == BME280_OK)
-    {
-        rslt = set_filter_standby_settings(BME280_SEL_ALL_SETTINGS, settings, dev);
-    }
+    int8_t rslt = BME280_OK;
 
     return rslt;
 }

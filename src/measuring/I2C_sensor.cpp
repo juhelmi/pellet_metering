@@ -49,6 +49,11 @@ I2C_sensor::I2C_sensor(int pollingInterval, int bus, int address) : Sensor(polli
   initAttributes();
 }
 
+I2C_sensor::~I2C_sensor()
+{
+  removeThisSensor(mBus, mAddress);
+}
+
 #if 1
 I2C_sensor::I2C_sensor(I2C_sensor& t)
 {
@@ -86,10 +91,6 @@ I2C_sensor & I2C_sensor::operator=(I2C_sensor && t)
   return *this;
 }
 
-
-I2C_sensor::~I2C_sensor()
-{
-}
 
 //  
 // Methods
@@ -156,6 +157,7 @@ int I2C_sensor::getAddress()
     {
       //mMapOfActiveSensors[key] = make_shared<I2C_sensor>(mPollingInterval, port, address);
       mMapOfActiveSensors[key] = this;
+      cout << "Sensor added with port " << port << " addr " << address << endl;
       return true;
     }
     return false;
@@ -163,12 +165,25 @@ int I2C_sensor::getAddress()
 
 void I2C_sensor::removeThisSensor(int port, int address)
 {
+  std::pair<int, int> key(port, address);
+  std::map<std::pair<int,int>, I2C_sensor*>::iterator it;
+  it = mMapOfActiveSensors.find(key);
+  if (it != mMapOfActiveSensors.end())
+  {
+    cout << "Removes " << port << " addr " << address << endl;
+    mMapOfActiveSensors.erase(it);
+  } else {
+    cout << "Not found " << port << " addr " << address << endl;
+  }
+
+
   mAllSensorCount--;
 }
 
 I2C_Logical_Sensor::I2C_Logical_Sensor(I2C_sensor* hwSensor, int pollingInterval, int bus, int address) :
 mHWSensor(hwSensor), mBus(bus), mAddress(address)
 {
+  mConfigurationOk = true;  // Set to false on error
   cout << "Logical sensor " << hwSensor->getName() << " created\n";
 }
 
@@ -176,4 +191,14 @@ I2C_Logical_Sensor::~I2C_Logical_Sensor() noexcept
 {
 }
 
+bool I2C_Logical_Sensor::isConfigurationOK()
+{
+  // Set to false on error
+  return mConfigurationOk;
+}
+
+void I2C_Logical_Sensor::raiseConfigurationError()
+{
+  mConfigurationOk = false;
+}
 

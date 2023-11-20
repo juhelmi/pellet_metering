@@ -90,6 +90,11 @@ BOOST_AUTO_TEST_CASE(device_share_test)
     int intervalX = 1*1000*1000;
 
     I2C_sensor_test statusCheck(intervalX, 0,0);
+    BOOST_CHECK_EQUAL(statusCheck.getAllUsedCount(), 1);
+    BME280_sensor *p_bme = new BME280_sensor(intervalX, 2, 0x78);
+    BOOST_CHECK_EQUAL(statusCheck.getAllUsedCount(), 2);
+    delete p_bme;
+    BOOST_CHECK_EQUAL(statusCheck.getAllUsedCount(), 1);
 
     BME280_sensor bme1(intervalX, 1, 0x76);
 

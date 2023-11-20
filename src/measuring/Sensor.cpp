@@ -11,7 +11,7 @@ Sensor::Sensor() : mTag(""), mPollingInterval(1000)
   cout << "Default not wanted\n";
 }
 
-Sensor::Sensor(int pollingInterval) : mTag(""), mPollingInterval(pollingInterval)
+Sensor::Sensor(int pollingInterval) : mValueType(NO_VALUE), mTag(""), mPollingInterval(pollingInterval)
 {
   //mTag = "";
   initAttributes();
@@ -80,5 +80,22 @@ void Sensor::executeSensorValueRead()
 {
   cout << "Reads value for " << mTag << " Location " << mLocation << endl;
 }
+
+Sensor::eValueType Sensor::getValueType()
+{
+  return mValueType;
+}
+
+
+int Sensor::getIntValue()
+{
+  return 0;
+}
+
+double Sensor::getDoubleValue()
+{
+  return 0;
+}
+
 
 

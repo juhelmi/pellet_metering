@@ -21,6 +21,8 @@ Sensor does not have any pure virtual methods, but its author
 class Sensor
 {
 public:
+  enum eValueType {NO_VALUE, INT_VALUE, DOUBLE_VALUE, BOOLEAN_VALUE, STRING_VALUE};   // bool and string are optional
+
   // Constructors/Destructors
   //  
 
@@ -60,11 +62,15 @@ public:
   std::string getName();
   void setLocation(std::string value);
   std::string getLocation();
+  eValueType getValueType();
+  virtual int getIntValue();
+  virtual double getDoubleValue();
 
 
 protected:
   // Static Protected attributes
   //  
+  eValueType mValueType;
   std::string mTag;           // at start this contains object type name
   std::string mLocation;  // For user documentation
 

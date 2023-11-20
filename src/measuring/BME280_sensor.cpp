@@ -217,6 +217,11 @@ void BME280_sensor::executeSensorValueRead()
       return;
   }
 
+#ifdef SIMULATE_HW
+  mComp_data.humidity = 45.6789;
+  mComp_data.pressure = 987.6543;
+  mComp_data.temperature = 23.456;
+#else
   /* Wait for the measurement to complete and print data */
   mDev.delay_us(mReq_delay, mDev.intf_ptr);
   mRslt = bme280_get_sensor_data(BME280_ALL, &mComp_data, &mDev);
@@ -225,6 +230,7 @@ void BME280_sensor::executeSensorValueRead()
       fprintf(stderr, "Failed to get sensor data (code %+d).", mRslt);
       return;
   }
+#endif
 
 #if 0
   #ifdef BME280_DOUBLE_ENABLE

@@ -38,6 +38,6 @@ void Temperature_room::initAttributes()
 
 void Temperature_room::executeSensorValueRead()
 {
-  cout << "Room temperature read for " << mTag << " Bus " << mBus << " Location " << mLocation << endl;
+  cout << "Room temperature read for " << mTag << " Bus " << mBus << " Location " << mLocation << " Value " << getValue() << endl;
 }
 

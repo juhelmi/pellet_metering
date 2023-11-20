@@ -159,13 +159,18 @@ public:
   I2C_Logical_Sensor(I2C_sensor* hwSensor, int pollingInterval, int bus, int address);
   virtual ~I2C_Logical_Sensor();
 
+  bool isConfigurationOK();
+
   // Value reading operation is overriden in next level where actual sensor type is known.
   // void executeSensorValueRead() override;
 
 protected:
   I2C_sensor* mHWSensor;    // Actual sensor that has multiple parameters to read.
+  bool mConfigurationOk;
   int mBus;
   int mAddress;
+
+  virtual void raiseConfigurationError();
 };
 
 #endif // I2C_SENSOR_H

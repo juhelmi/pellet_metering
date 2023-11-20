@@ -42,7 +42,12 @@ public:
   // Public attribute accessor methods
   //  
 
+  void executeSensorValueRead() override;
 
+  double getValue()
+  {
+    return getPressure();
+  }
 
   /**
    * @return double

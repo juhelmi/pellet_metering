@@ -8,6 +8,7 @@
 #include "I2C_sensor.h"
 #include "ADC_sensor.h"
 #include "Air_pressure.h"
+#include "Humidity.h"
 #include "Temperature_room.h"
 #include "BME280_sensor.h"
 
@@ -94,7 +95,7 @@ BOOST_AUTO_TEST_CASE(Scheduler_test_Test)
     dummyTemp.setLocation("Out door");
     Air_pressure dummyPressure(&bmeHw1, 9*intervalX/4, 2,3);
     dummyPressure.setLocation("Out door");
-    BME280_sensor dummyBME(4+4*intervalX, 4,0x77);
+    BME280_sensor dummyBME(4+4*intervalX, 4, 0x77);
 
     Temperature_room temp2(&bmeHw2, 3*intervalX/2, 1, 0x77);
     temp2.setLocation("Storage");
@@ -104,11 +105,14 @@ BOOST_AUTO_TEST_CASE(Scheduler_test_Test)
     BOOST_CHECK_EQUAL(readTimer.getSensorCount(), 0);
     BOOST_CHECK_EQUAL(readTimer.getPollingListSize(), 0);
 
+    Humidity inv_hum(&bmeHw2, 2*intervalX, 1, 0x77);
+
     readTimer.addSensor(&dummyTemp);
     readTimer.addSensor(&dummyPressure);
     readTimer.addSensor(&dummyBME);
     readTimer.addSensor(&temp2);
     readTimer.addSensor(&press2);
+    readTimer.addSensor(&inv_hum);
 
     BOOST_CHECK_EQUAL(readTimer.getSensorCount(), 5);
     BOOST_CHECK_EQUAL(readTimer.getPollingListSize(), 5);
