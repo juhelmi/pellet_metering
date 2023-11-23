@@ -63,6 +63,7 @@ double Temperature_room::getTemperature()
 std::shared_ptr<Measurement> Temperature_room::getMeasurement()
 {
   auto pMeas = Sensor::getMeasurement();
+  pMeas->mMeas.mType = tDOUDBLE;
   pMeas->mMeas.dValue = getTemperature();
   return pMeas;
 }

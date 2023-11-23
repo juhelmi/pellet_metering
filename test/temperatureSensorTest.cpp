@@ -8,6 +8,7 @@
 #include "I2C_sensor.h"
 #include "ADC_sensor.h"
 #include "Air_pressure.h"
+#include "Humidity.h"
 #include "Temperature_room.h"
 #include "BME280_sensor.h"
 
@@ -65,13 +66,19 @@ BOOST_AUTO_TEST_CASE(i2c_check_test)
         BOOST_CHECK_EQUAL(devBME.getLastBmeErrorCode(), BME280_OK);
         BOOST_CHECK_EQUAL(devBMP.getLastBmeErrorCode(), BME280_OK);
 
+        Temperature_room t_BME(&devBME, 4+1*intervalX, 1, 0x76);
+        Humidity h_BME(&devBME, 4+1*intervalX, 1, 0x76);
+
         readTimer.addSensor(&devBME);
         readTimer.addSensor(&devBMP);
+        readTimer.addSensor(&t_BME);
+        readTimer.addSensor(&h_BME);
 
         for (int i=0; i<2; i++)
         {
             readTimer.pollTimedSensors();
             BOOST_CHECK_EQUAL(devBME.getLastBmeErrorCode(), BME280_OK);
+            readTimer.collectCurrentValues();
             //usleep(1*1000);
             usleep(intervalX/2);
         }
@@ -111,6 +118,7 @@ BOOST_AUTO_TEST_CASE(device_share_test)
     {
         readTimer.pollTimedSensors();
         BOOST_CHECK_EQUAL(bme1.getLastBmeErrorCode(), BME280_OK);
+        readTimer.collectCurrentValues();
         //usleep(1*1000);
         usleep(intervalX/2);
     }

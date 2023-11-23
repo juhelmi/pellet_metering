@@ -300,7 +300,6 @@ double BME280_sensor::getPressure()
 
 double BME280_sensor::getHumidity()
 {
-  cout << "Humidity value is " << mComp_data.humidity << " mode " << mSensor_use << endl;
   switch (mSensor_use )
   {
     default:

@@ -4,7 +4,7 @@
 
 #include <string>
 
-enum MeasurementType {tDOUDBLE, tINT};
+enum MeasurementType {tNONE, tDOUDBLE, tINT};
 
 typedef int64_t tMeasurementTime;
 

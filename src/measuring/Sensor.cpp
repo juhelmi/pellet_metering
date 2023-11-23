@@ -100,7 +100,7 @@ double Sensor::getDoubleValue()
 std::shared_ptr<Measurement> Sensor::getMeasurement()
 {
  std::shared_ptr<Measurement> meas = std::make_shared<Measurement>();
- meas->mMeas.mType = MeasurementType::tDOUDBLE;
+ meas->mMeas.mType = MeasurementType::tNONE;
  meas->mMeas.dValue = getDoubleValue();
   return meas;
 }
