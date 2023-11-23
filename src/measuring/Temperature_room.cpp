@@ -59,3 +59,10 @@ double Temperature_room::getTemperature()
   }
   return 0;
 }
+
+std::shared_ptr<Measurement> Temperature_room::getMeasurement()
+{
+  auto pMeas = Sensor::getMeasurement();
+  pMeas->mMeas.dValue = getTemperature();
+  return pMeas;
+}

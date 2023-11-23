@@ -25,7 +25,8 @@ struct SingleMeasurement {
 
 class Measurement
 {
-private:
+//private:
+public:
   std::string mName;
   SingleMeasurement mMeas;
 
@@ -59,7 +60,7 @@ public:
   // Public attribute accessor methods
   //  
 
-
+  void setMeasurement(struct SingleMeasurement value);
 
   /**
    * @return MeasurementType

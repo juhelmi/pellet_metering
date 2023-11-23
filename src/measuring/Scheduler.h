@@ -16,6 +16,12 @@ private:
 protected:
     std::list<Sensor*> mSensors;
     std::multimap<tMeasurementTime, Sensor*> mNextPolls;
+    /**
+     * Current measurements are in List according to sample interval.
+     * List contains only last meaningful length of measurements.
+     * If history is needed then there could be virtual sensors where value is calculated according to other sensors.
+     */
+    std::list<std::list<Measurement>> mMeasurements;
 
 public:
   // Constructors/Destructors
@@ -38,6 +44,8 @@ public:
   void addSensor(Sensor *newSensor);
 
   int pollTimedSensors();
+
+  int collectCurrentValues();
 };
 
 

@@ -52,6 +52,7 @@ public:
   //  
 
   void executeSensorValueRead() override;
+  std::shared_ptr<Measurement> getMeasurement() override;
 
   double getValue()
   {

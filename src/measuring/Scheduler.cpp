@@ -136,3 +136,29 @@ int Scheduler::pollTimedSensors()
     return elapsedSensors;
 }
 
+int Scheduler::collectCurrentValues()
+{
+    int count = 0;
+    // std::pair<char, int> elem : mmapOfPos
+    for (std::pair<tMeasurementTime,Sensor*> elem : mNextPolls)
+    {
+        // fill measurement struct from sensor
+        cout << "CV Sensor " << elem.second->getName() << " ValueType " << elem.second->getMeasurement()->mMeas.mType;
+        switch (elem.second->getMeasurement()->mMeas.mType )
+        {
+            case tDOUDBLE:
+                cout << " double: ";
+                cout << elem.second->getMeasurement()->mMeas.dValue;
+                break;
+            case tINT:
+                cout << " int: ";
+                cout << elem.second->getMeasurement()->mMeas.iValue;
+                break;
+            default:
+                break;
+        }
+        cout << endl;
+        count++;
+    }
+    return count;
+}

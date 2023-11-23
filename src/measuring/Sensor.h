@@ -3,6 +3,7 @@
 #define SENSOR_H
 
 #include <string>
+#include <memory>
 
 #include "Measurement.h"
 #include "config.hpp"
@@ -65,6 +66,7 @@ public:
   eValueType getValueType();
   virtual int getIntValue();
   virtual double getDoubleValue();
+  virtual std::shared_ptr<Measurement> getMeasurement();
 
 
 protected:

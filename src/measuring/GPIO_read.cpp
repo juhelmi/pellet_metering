@@ -72,6 +72,14 @@ void GPIO_read::executeSensorValueRead()
     }
 }
 
+std::shared_ptr<Measurement> GPIO_read::getMeasurement()
+{
+    std::shared_ptr<Measurement> meas = std::make_shared<Measurement>();
+    meas->mMeas.mType = MeasurementType::tINT;
+    meas->mMeas.iValue = mPinIndex;
+    return meas;
+}
+
 
 // Accessor methods
 //  

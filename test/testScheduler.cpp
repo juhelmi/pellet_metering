@@ -138,6 +138,7 @@ BOOST_AUTO_TEST_CASE(Scheduler_test_Test)
         p_sens = readTimer.getNextTimedSensor();
         cout << "First name in list " << p_sens->getName() << " Location: " << p_sens->getLocation() << endl;
         readTimer.pollTimedSensors();
+        readTimer.collectCurrentValues();
         usleep(check_interval/2*1000);
     }
 }

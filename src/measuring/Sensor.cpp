@@ -97,5 +97,12 @@ double Sensor::getDoubleValue()
   return 0;
 }
 
+std::shared_ptr<Measurement> Sensor::getMeasurement()
+{
+ std::shared_ptr<Measurement> meas = std::make_shared<Measurement>();
+ meas->mMeas.mType = MeasurementType::tDOUDBLE;
+ meas->mMeas.dValue = getDoubleValue();
+  return meas;
+}
 
 
