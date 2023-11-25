@@ -1,5 +1,6 @@
 #include "Temperature_room.h"
 #include <iostream>
+#include <sstream>
 
 using namespace std;
 
@@ -35,6 +36,14 @@ void Temperature_room::initAttributes()
   minTemp = -10;
   maxTemp = 60;
 }
+
+std::string Temperature_room::getFullId()
+{
+  stringstream ss;
+  ss << mTag << " " << mBus << " " << mAddress << " unit: %";
+  return ss.str();
+}
+
 
 void Temperature_room::executeSensorValueRead()
 {

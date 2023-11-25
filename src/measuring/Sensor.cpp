@@ -66,6 +66,12 @@ void Sensor::setName(std::string value)
   mTag = value;
 }
 
+std::string Sensor::getFullId()
+{
+  return mTag + " Generic";
+}
+
+
 void Sensor::setLocation(std::string value)
 {
   mLocation = value;
@@ -100,6 +106,9 @@ double Sensor::getDoubleValue()
 std::shared_ptr<Measurement> Sensor::getMeasurement()
 {
  std::shared_ptr<Measurement> meas = std::make_shared<Measurement>();
+ // Identity for measurement
+ meas->mName = getFullId();
+ // Value for measurement
  meas->mMeas.mType = MeasurementType::tNONE;
  meas->mMeas.dValue = getDoubleValue();
   return meas;

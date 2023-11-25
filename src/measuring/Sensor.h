@@ -61,6 +61,7 @@ public:
    * @return the value of name
    */
   std::string getName();
+  virtual std::string getFullId();
   void setLocation(std::string value);
   std::string getLocation();
   eValueType getValueType();

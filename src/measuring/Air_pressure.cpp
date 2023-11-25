@@ -1,5 +1,6 @@
 #include "Air_pressure.h"
 #include <iostream>
+#include <sstream>
 
 using namespace std;
 
@@ -21,6 +22,14 @@ Air_pressure::~Air_pressure()
 //  
 // Methods
 //  
+
+std::string Air_pressure::getFullId()
+{
+  stringstream ss;
+  // Get type name and address
+  ss << mTag << " " << mBus << " " << mAddress << " unit: hPa";
+  return ss.str();
+}
 
 
 // Accessor methods

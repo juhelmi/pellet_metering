@@ -118,7 +118,7 @@ BOOST_AUTO_TEST_CASE(Scheduler_test_Test)
     BOOST_CHECK_EQUAL(readTimer.getPollingListSize(), 5);
 
     GPIO_read dummyPin(2*intervalX-5, 7);
-    dummyPin.setLocation("Just IO read");
+    dummyPin.setLocation("TstPosition");
     readTimer.addSensor(&dummyPin);
     BOOST_CHECK_EQUAL(readTimer.getSensorCount(), 6);
     BOOST_TEST(dummyPin.getName() == "GPIO_read");

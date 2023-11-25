@@ -143,7 +143,7 @@ int Scheduler::collectCurrentValues()
     for (std::pair<tMeasurementTime,Sensor*> elem : mNextPolls)
     {
         // fill measurement struct from sensor
-        cout << "CV Sensor " << elem.second->getName() << " ValueType " << elem.second->getMeasurement()->mMeas.mType;
+        cout << "cCV Sensor " << elem.second->getFullId() << " ValueType " << elem.second->getMeasurement()->mMeas.mType;
         switch (elem.second->getMeasurement()->mMeas.mType )
         {
             case tDOUDBLE:

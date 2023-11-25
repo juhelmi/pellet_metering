@@ -1,7 +1,7 @@
 #include "GPIO_read.h"
 #include "config.hpp"
 
-
+#include <sstream>
 #include <iostream>
 
 using namespace std;
@@ -30,7 +30,7 @@ GPIO_read::GPIO_read() : Sensor(998)
     mPinIndex = 0;
 }
 
-GPIO_read::GPIO_read(int pollingInterval, int pinIndex) : Sensor(pollingInterval), mPinIndex(pinIndex)
+GPIO_read::GPIO_read(int pollingInterval, int pinIndex) : Sensor(pollingInterval), mPinIndex(pinIndex), mPinValue(-1)
 {
     const int pullDirection = PUD_UP;
     mTag = "GPIO_read";
@@ -47,13 +47,22 @@ GPIO_read::~GPIO_read()
 // Methods
 //  
 
+std::string GPIO_read::getFullId()
+{
+    stringstream ss;
+    ss << mTag << " " << mLocation << " " << mPinIndex << " " << mPinName;
+    return ss.str();
+}
+
+
 void GPIO_read::executeSensorValueRead()
 {
     cout << "IO read value for " << mTag << " Location " << mLocation << " Pin " << mPinIndex << " PinName " << mPinName << endl;
     if (simulate_hw)
     {
         // Read from file?
-        cout << "Simulation coming" << endl;
+        cout << "Simulation coming for GPIO" << endl;
+        mPinValue = 1 & mPinIndex;
     } else {
         cout << "Raspberry Pi HW read coming" << endl;
 #if 1
@@ -67,16 +76,16 @@ void GPIO_read::executeSensorValueRead()
         mLastReadFunction = gp.function;
         mPullUpDn = gp.pull;
 #endif
-        cout << "GPIO " << mPinIndex << " Value " << mPinValue << " Function " << mLastReadFunction << " Pull " << mPullUpDn << endl;
-
     }
+    cout << "GPIO " << mPinIndex << " Value " << mPinValue << " Function " << mLastReadFunction << " Pull " << mPullUpDn << endl;
 }
 
 std::shared_ptr<Measurement> GPIO_read::getMeasurement()
 {
     std::shared_ptr<Measurement> meas = std::make_shared<Measurement>();
+    meas->mName = getFullId();
     meas->mMeas.mType = MeasurementType::tINT;
-    meas->mMeas.iValue = mPinIndex;
+    meas->mMeas.iValue = mPinValue;
     return meas;
 }
 

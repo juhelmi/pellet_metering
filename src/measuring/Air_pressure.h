@@ -42,6 +42,7 @@ public:
   // Public attribute accessor methods
   //  
 
+  std::string getFullId() override;
   void executeSensorValueRead() override;
 
   double getValue()
