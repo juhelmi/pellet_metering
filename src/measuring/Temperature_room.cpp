@@ -15,6 +15,18 @@ I2C_Logical_Sensor(hwSensor, pollingInterval, bus, address)
   mTag = "Temperature_room";
 }
 
+Temperature_room::Temperature_room(I2C_sensor* hwSensor) :
+Sensor(-4),
+I2C_Logical_Sensor(hwSensor)
+{
+  /*int pollingInterval = hwSensor->getPollingInterval();
+  int bus = hwSensor->getBus();
+  int address = hwSensor->getAddress();
+  I2C_Logical_Sensor(hwSensor, pollingInterval, bus, address);*/
+  mTag = "Temperature_room";
+}
+
+
 Temperature_room::~Temperature_room()
 {
 }

@@ -55,6 +55,8 @@ public:
 
   // Public attributes
   //  
+  int getBus() { return mBus;}
+  int getAddress() {return mAddress; }
 
 
   // Public attribute accessor methods
@@ -132,12 +134,6 @@ private:
   void setAddress(int value);
 
   /**
-   * Get the value of address
-   * @return the value of address
-   */
-  int getAddress();
-
-  /**
    * Set the value of dev_nr
    * @param value the new value of dev_nr
    */
@@ -156,6 +152,7 @@ private:
 class I2C_Logical_Sensor : virtual public Sensor
 {
 public:
+  I2C_Logical_Sensor(I2C_sensor* hwSensor);
   I2C_Logical_Sensor(I2C_sensor* hwSensor, int pollingInterval, int bus, int address);
   virtual ~I2C_Logical_Sensor();
 

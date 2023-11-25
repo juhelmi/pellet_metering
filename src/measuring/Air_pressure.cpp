@@ -7,6 +7,15 @@ using namespace std;
 // Constructors/Destructors
 //  
 
+Air_pressure::Air_pressure(I2C_sensor* hwSensor) :
+Sensor(-3),
+I2C_Logical_Sensor(hwSensor)
+{
+  initAttributes();
+  mTag = "Air_pressure";
+}
+
+
 Air_pressure::Air_pressure(I2C_sensor* hwSensor, int pollingInterval, int bus, int address) :
 Sensor(pollingInterval),
 I2C_Logical_Sensor(hwSensor, pollingInterval, bus, address)
@@ -48,6 +57,26 @@ void Air_pressure::executeSensorValueRead()
 {
   cout << "Air pressure read for " << mTag << " Bus " << mBus << " Location " << mLocation << " Value " << getValue() << endl;
 }
+
+double Air_pressure::getPressure()
+{
+  if (typeid(*mHWSensor) == typeid(BME280_sensor))
+  {
+    BME280_sensor* pBME = dynamic_cast<BME280_sensor*>(mHWSensor);
+    if (pBME->getLastBmeErrorCode() != 0)
+    {
+      // cout << "BME Error\n";
+      mConfigurationOk = false;
+    }
+    if (mConfigurationOk)
+    {
+      return pBME->getPressure();
+    }
+  } else {
+  }
+  return 0;
+}
+
 
 std::shared_ptr<Measurement> Air_pressure::getMeasurement()
 {

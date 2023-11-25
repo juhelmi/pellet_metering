@@ -30,6 +30,7 @@ public:
   /**
    * Empty Constructor
    */
+  Temperature_room(I2C_sensor* hwSensor);
   Temperature_room(I2C_sensor* hwSensor, int pollingInterval, int bus, int address);
 
   /**

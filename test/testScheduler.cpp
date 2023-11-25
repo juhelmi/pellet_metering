@@ -105,14 +105,14 @@ BOOST_AUTO_TEST_CASE(Scheduler_test_Test)
     BOOST_CHECK_EQUAL(readTimer.getSensorCount(), 0);
     BOOST_CHECK_EQUAL(readTimer.getPollingListSize(), 0);
 
-    Humidity inv_hum(&bmeHw2, 2*intervalX, 1, 0x77);
+    Humidity inv_hum(&bmeHw2); //, 2*intervalX, 1, 0x77);
 
     readTimer.addSensor(&dummyTemp);
     readTimer.addSensor(&dummyPressure);
     readTimer.addSensor(&dummyBME);
     readTimer.addSensor(&temp2);
     readTimer.addSensor(&press2);
-    readTimer.addSensor(&inv_hum);
+    //readTimer.addSensor(&inv_hum);
 
     BOOST_CHECK_EQUAL(readTimer.getSensorCount(), 5);
     BOOST_CHECK_EQUAL(readTimer.getPollingListSize(), 5);

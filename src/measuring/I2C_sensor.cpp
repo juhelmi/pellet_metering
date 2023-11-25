@@ -118,11 +118,6 @@ void I2C_sensor::setAddress(int value)
     mAddress = value;
   }
 
-int I2C_sensor::getAddress()
-  {
-    return mAddress;
-  }
-
   void I2C_sensor::setDev_nr(int value)
   {
     mBus = value;
@@ -178,6 +173,14 @@ void I2C_sensor::removeThisSensor(int port, int address)
 
 
   mAllSensorCount--;
+}
+
+I2C_Logical_Sensor::I2C_Logical_Sensor(I2C_sensor* hwSensor)
+{
+  mConfigurationOk = true;  // Set to false on error
+  mPollingInterval = hwSensor->getPollingInterval();
+  mBus = hwSensor->getBus();
+  mAddress = hwSensor->getAddress();
 }
 
 I2C_Logical_Sensor::I2C_Logical_Sensor(I2C_sensor* hwSensor, int pollingInterval, int bus, int address) :

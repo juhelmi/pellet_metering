@@ -9,6 +9,16 @@ using namespace std;
 // Constructors/Destructors
 //
 
+Humidity::Humidity(I2C_sensor* hwSensor) :
+Sensor(-2),
+I2C_Logical_Sensor(hwSensor)
+{
+  // init attributes
+  mTag = "Humidity";
+  mPollingInterval = hwSensor->getPollingInterval();
+}
+
+
 Humidity::Humidity(I2C_sensor* hwSensor, int pollingInterval, int bus, int address) :
 Sensor(pollingInterval),
 I2C_Logical_Sensor(hwSensor, pollingInterval, bus, address)
@@ -44,8 +54,10 @@ double Humidity::getValue()
     }
     if (mConfigurationOk)
     {
-        return pBME->getHumidity();
+      return pBME->getHumidity();
     }
+  } else {
+    cout << __FILE__ << " " << __LINE__ << endl;
   }
   return 0;
 }

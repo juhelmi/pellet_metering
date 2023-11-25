@@ -157,6 +157,7 @@ int Scheduler::collectCurrentValues()
                 cout << elem.second->getMeasurement()->mMeas.iValue;
                 break;
             default:
+                cout << " not defined " << __LINE__;
                 break;
         }
         cout << endl;

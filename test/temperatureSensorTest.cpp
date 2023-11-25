@@ -68,19 +68,29 @@ BOOST_AUTO_TEST_CASE(i2c_check_test)
 
         Temperature_room t_BME(&devBME, 4+1*intervalX, 1, 0x76);
         Humidity h_BME(&devBME, 4+1*intervalX, 1, 0x76);
+        Air_pressure p_BME(&devBME, 4+1*intervalX, 1, 0x76);
+
+        Temperature_room t_BMP(&devBMP, 4+1*intervalX, 1, 0x77);
+        //Humidity h_BMP(&devBMP); //, 4+1*intervalX, 1, 0x77);
+        Air_pressure p_BMP(&devBMP); //, 4+1*intervalX, 1, 0x77);
 
         readTimer.addSensor(&devBME);
         readTimer.addSensor(&devBMP);
         readTimer.addSensor(&t_BME);
         readTimer.addSensor(&h_BME);
+        readTimer.addSensor(&p_BME);
 
-        for (int i=0; i<2; i++)
+        readTimer.addSensor(&t_BMP);
+        //readTimer.addSensor(&h_BMP);
+        readTimer.addSensor(&p_BMP);
+
+        for (int i=0; i<6; i++)
         {
             readTimer.pollTimedSensors();
             BOOST_CHECK_EQUAL(devBME.getLastBmeErrorCode(), BME280_OK);
             readTimer.collectCurrentValues();
             //usleep(1*1000);
-            usleep(intervalX/2);
+            usleep(intervalX);
         }
         // Some value should be received
         if (!simulate_hw)

@@ -21,6 +21,7 @@ public:
   /**
    * Empty Constructor
    */
+  Air_pressure(I2C_sensor* hwSensor);
   Air_pressure(I2C_sensor* hwSensor, int pollingInterval, int bus, int address);
 
   /**
@@ -54,10 +55,7 @@ public:
   /**
    * @return double
    */
-  double getPressure()
-  {
-    return 0;
-  }
+  double getPressure();
 
 protected:
   // Static Protected attributes

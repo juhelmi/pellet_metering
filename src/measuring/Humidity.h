@@ -9,7 +9,8 @@
 class Humidity : virtual public I2C_Logical_Sensor
 {
 public:
-    Humidity(I2C_sensor* hwSensor, int pollingInterval, int bus, int address);
+  Humidity(I2C_sensor* hwSensor);
+  Humidity(I2C_sensor* hwSensor, int pollingInterval, int bus, int address);
   /**
    * Empty Destructor
    */
