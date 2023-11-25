@@ -1,6 +1,7 @@
 #include "Humidity.h"
 
 #include <iostream>
+#include <sstream>
 #include <typeinfo>
 
 using namespace std;
@@ -18,6 +19,14 @@ I2C_Logical_Sensor(hwSensor, pollingInterval, bus, address)
 Humidity::~Humidity()
 {
 }
+
+std::string Humidity::getFullId()
+{
+  stringstream ss;
+  ss << mTag <<" "<< mBus << " " << mAddress << " unit: %";;
+  return ss.str();
+}
+
 
 void Humidity::executeSensorValueRead()
 {

@@ -89,6 +89,7 @@ BOOST_AUTO_TEST_CASE(i2c_check_test)
         BOOST_CHECK_NE(devBMP.getTemperature(), 0);
         BOOST_CHECK_NE(devBMP.getPressure(), 0);
         BOOST_CHECK_EQUAL(devBMP.getHumidity(), 0);
+        readTimer.printMeasureHistory(5);
 }
 
 BOOST_AUTO_TEST_CASE(device_share_test)
@@ -124,4 +125,5 @@ BOOST_AUTO_TEST_CASE(device_share_test)
     }
     cout << "Air_pressure " << devAP.getPressure() << endl;
     cout << "Temperature " << devTemp.getTemperature() << endl;
+    readTimer.printMeasureHistory(5);
 }

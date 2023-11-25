@@ -40,7 +40,7 @@ void Temperature_room::initAttributes()
 std::string Temperature_room::getFullId()
 {
   stringstream ss;
-  ss << mTag << " " << mBus << " " << mAddress << " unit: %";
+  ss << mTag << " " << mBus << " " << mAddress << " unit: C";
   return ss.str();
 }
 

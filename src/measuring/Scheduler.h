@@ -21,7 +21,7 @@ protected:
      * List contains only last meaningful length of measurements.
      * If history is needed then there could be virtual sensors where value is calculated according to other sensors.
      */
-    std::list<std::list<Measurement>> mMeasurements;
+    std::list<std::list<std::shared_ptr<Measurement>>> mMeasurements;
 
 public:
   // Constructors/Destructors
@@ -46,6 +46,8 @@ public:
   int pollTimedSensors();
 
   int collectCurrentValues();
+
+  void printMeasureHistory(int length);
 };
 
 

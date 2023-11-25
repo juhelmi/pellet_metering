@@ -139,6 +139,8 @@ int Scheduler::pollTimedSensors()
 int Scheduler::collectCurrentValues()
 {
     int count = 0;
+    std::list<shared_ptr<Measurement>> measList;
+
     // std::pair<char, int> elem : mmapOfPos
     for (std::pair<tMeasurementTime,Sensor*> elem : mNextPolls)
     {
@@ -158,7 +160,32 @@ int Scheduler::collectCurrentValues()
                 break;
         }
         cout << endl;
+        if (elem.second->getMeasurement()->mMeas.mType != tNONE)
+        {
+            measList.push_back(elem.second->getMeasurement());
+        }
         count++;
     }
+    mMeasurements.push_back(measList);
     return count;
 }
+
+void Scheduler::printMeasureHistory(int length)
+{
+    int slotsToSkip = mMeasurements.size() - length;
+    for (auto elem : mMeasurements)
+    {
+        if (slotsToSkip > 0)
+        {
+            slotsToSkip--;
+        } else {
+            cout << "X " << endl;
+            for (auto meas : elem)
+            {
+                cout << meas->mName << " value: ";
+            }
+            cout << endl;
+        }
+    }
+}
+
