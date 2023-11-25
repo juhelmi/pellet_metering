@@ -79,6 +79,7 @@ public:
    */
   int getInt();
 
+  std::string getResultAsString();
 
   /**
    * @return string

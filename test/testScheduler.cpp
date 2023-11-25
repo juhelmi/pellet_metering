@@ -141,6 +141,7 @@ BOOST_AUTO_TEST_CASE(Scheduler_test_Test)
         readTimer.collectCurrentValues();
         usleep(check_interval/2*1000);
     }
+    readTimer.printMeasureHistory(5);
 }
 
 BOOST_AUTO_TEST_SUITE_END() // testScheduler

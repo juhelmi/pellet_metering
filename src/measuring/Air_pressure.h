@@ -44,6 +44,7 @@ public:
 
   std::string getFullId() override;
   void executeSensorValueRead() override;
+  std::shared_ptr<Measurement> getMeasurement() override;
 
   double getValue()
   {

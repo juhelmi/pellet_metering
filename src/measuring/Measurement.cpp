@@ -1,5 +1,7 @@
 #include "Measurement.h"
 
+#include <sstream>
+
 // Constructors/Destructors
 //  
 
@@ -29,6 +31,27 @@ MeasurementType Measurement::getResultType()
 {
     return mMeas.mType;
 }
+
+std::string Measurement::getResultAsString()
+{
+    std::stringstream ss;
+    switch (mMeas.mType)
+    {
+        case tNONE:
+            break;
+        case tDOUDBLE:
+            ss << mMeas.dValue;
+            break;
+        case tINT:
+            ss << mMeas.iValue;
+            break;
+        default:
+            ss << "Measurement undefined type";
+            break;
+    }
+    return ss.str();
+}
+
 
 double Measurement::getDouble()
 {

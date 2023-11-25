@@ -162,6 +162,10 @@ int Scheduler::collectCurrentValues()
         cout << endl;
         if (elem.second->getMeasurement()->mMeas.mType != tNONE)
         {
+            if (elem.second->getMeasurement()->mName == "")
+            {
+                cout << "Measurement name set for " << elem.second->getName() << endl;
+            }
             measList.push_back(elem.second->getMeasurement());
         }
         count++;
@@ -173,19 +177,22 @@ int Scheduler::collectCurrentValues()
 void Scheduler::printMeasureHistory(int length)
 {
     int slotsToSkip = mMeasurements.size() - length;
+    int cnt = mMeasurements.size();
     for (auto elem : mMeasurements)
     {
         if (slotsToSkip > 0)
         {
             slotsToSkip--;
         } else {
-            cout << "X " << endl;
+            cout << "X measurements " << cnt << endl;
             for (auto meas : elem)
             {
-                cout << meas->mName << " value: ";
+                cout << meas->mName << " value: " << meas->getResultAsString();
+                cout << ", ";
             }
             cout << endl;
         }
+        cnt--;
     }
 }
 

@@ -57,7 +57,7 @@ double Temperature_room::getTemperature()
     BME280_sensor* pBME = dynamic_cast<BME280_sensor*>(mHWSensor);
     if (pBME->getLastBmeErrorCode() != 0)
     {
-      cout << "Error\n";
+      // cout << "BME Error\n";
       mConfigurationOk = false;
     }
     if (mConfigurationOk)

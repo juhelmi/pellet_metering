@@ -53,6 +53,7 @@ double Humidity::getValue()
 std::shared_ptr<Measurement> Humidity::getMeasurement()
 {
   std::shared_ptr<Measurement> meas = std::make_shared<Measurement>();
+  meas->mName = getFullId();
   meas->mMeas.mType = MeasurementType::tDOUDBLE;
   meas->mMeas.dValue = getValue();
   return meas;

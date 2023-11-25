@@ -49,3 +49,11 @@ void Air_pressure::executeSensorValueRead()
   cout << "Air pressure read for " << mTag << " Bus " << mBus << " Location " << mLocation << " Value " << getValue() << endl;
 }
 
+std::shared_ptr<Measurement> Air_pressure::getMeasurement()
+{
+  std::shared_ptr<Measurement> meas = std::make_shared<Measurement>();
+  meas->mName = getFullId();
+  meas->mMeas.mType = MeasurementType::tDOUDBLE;
+  meas->mMeas.dValue = getValue();
+  return meas;
+}

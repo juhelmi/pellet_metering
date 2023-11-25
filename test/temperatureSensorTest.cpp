@@ -83,12 +83,15 @@ BOOST_AUTO_TEST_CASE(i2c_check_test)
             usleep(intervalX/2);
         }
         // Some value should be received
-        BOOST_CHECK_NE(devBME.getTemperature(), 0);
-        BOOST_CHECK_NE(devBME.getPressure(), 0);
-        BOOST_CHECK_NE(devBME.getHumidity(), 0);
-        BOOST_CHECK_NE(devBMP.getTemperature(), 0);
-        BOOST_CHECK_NE(devBMP.getPressure(), 0);
-        BOOST_CHECK_EQUAL(devBMP.getHumidity(), 0);
+        if (!simulate_hw)
+        {
+            BOOST_CHECK_NE(devBME.getTemperature(), 0);
+            BOOST_CHECK_NE(devBME.getPressure(), 0);
+            BOOST_CHECK_NE(devBME.getHumidity(), 0);
+            BOOST_CHECK_NE(devBMP.getTemperature(), 0);
+            BOOST_CHECK_NE(devBMP.getPressure(), 0);
+            BOOST_CHECK_EQUAL(devBMP.getHumidity(), 0);
+        }
         readTimer.printMeasureHistory(5);
 }
 
