@@ -66,11 +66,12 @@ BOOST_AUTO_TEST_CASE(i2c_check_test)
         BOOST_CHECK_EQUAL(devBME.getLastBmeErrorCode(), BME280_OK);
         BOOST_CHECK_EQUAL(devBMP.getLastBmeErrorCode(), BME280_OK);
 
-        Temperature_room t_BME(&devBME, 4+1*intervalX, 1, 0x76);
-        Humidity h_BME(&devBME, 4+1*intervalX, 1, 0x76);
-        Air_pressure p_BME(&devBME, 4+1*intervalX, 1, 0x76);
+        Temperature_room t_BME(&devBME); //, 4+1*intervalX, 1, 0x76);
+        Humidity h_BME(&devBME); //, 4+1*intervalX, 1, 0x76);
+        Air_pressure p_BME(&devBME); //, 4+1*intervalX, 1, 0x76);
 
-        Temperature_room t_BMP(&devBMP, 4+1*intervalX, 1, 0x77);
+        //Temperature_room t_BMP(&devBMP, 4+1*intervalX, 1, 0x77);
+        Temperature_room t_BMP(&devBMP);
         //Humidity h_BMP(&devBMP); //, 4+1*intervalX, 1, 0x77);
         Air_pressure p_BMP(&devBMP); //, 4+1*intervalX, 1, 0x77);
 

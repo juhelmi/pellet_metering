@@ -6,10 +6,10 @@ using namespace std;
 // Constructors/Destructors
 //  
 
-Sensor::Sensor() : mTag(""), mPollingInterval(1000)
+/*Sensor::Sensor() : mTag(""), mPollingInterval(1000)
 {
   cout << "Default not wanted\n";
-}
+}*/
 
 Sensor::Sensor(int pollingInterval) : mValueType(NO_VALUE), mTag(""), mPollingInterval(pollingInterval)
 {

@@ -31,7 +31,7 @@ public:
   /**
    * Empty Constructor
    */
-  Sensor();
+  //Sensor();
   Sensor(int pollingInterval);
 
   /**

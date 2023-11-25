@@ -91,7 +91,8 @@ BOOST_AUTO_TEST_CASE(Scheduler_test_Test)
     BME280_sensor bmeHw1(intervalX, 1, 0x76);
     BME280_sensor bmeHw2(intervalX, 1, 0x77);
 
-    Temperature_room dummyTemp(&bmeHw1, intervalX/5, 2, 3);
+    //Temperature_room dummyTemp(&bmeHw1, intervalX/5, 2, 3);
+    Temperature_room dummyTemp(&bmeHw1);
     dummyTemp.setLocation("Out door");
     Air_pressure dummyPressure(&bmeHw1, 9*intervalX/4, 2,3);
     dummyPressure.setLocation("Out door");

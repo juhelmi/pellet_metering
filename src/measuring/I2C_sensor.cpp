@@ -54,7 +54,7 @@ I2C_sensor::~I2C_sensor()
   removeThisSensor(mBus, mAddress);
 }
 
-#if 1
+#if 0
 I2C_sensor::I2C_sensor(I2C_sensor& t)
 {
   mBus = t.mBus;
@@ -73,7 +73,7 @@ I2C_sensor & I2C_sensor::operator=(const I2C_sensor& t)
   return *this;
 }
 
-
+#if 0
 I2C_sensor::I2C_sensor(const I2C_sensor& t)
 {
   mBus = t.mBus;
@@ -81,6 +81,7 @@ I2C_sensor::I2C_sensor(const I2C_sensor& t)
   mDevName = t.mDevName;
   cout << "Nearly move " << __FUNCTION__ << __LINE__ << endl;
 }
+#endif
 
 I2C_sensor & I2C_sensor::operator=(I2C_sensor && t)
 {
@@ -175,7 +176,8 @@ void I2C_sensor::removeThisSensor(int port, int address)
   mAllSensorCount--;
 }
 
-I2C_Logical_Sensor::I2C_Logical_Sensor(I2C_sensor* hwSensor)
+I2C_Logical_Sensor::I2C_Logical_Sensor(I2C_sensor* hwSensor) :
+Sensor(-5), mHWSensor(hwSensor)
 {
   mConfigurationOk = true;  // Set to false on error
   mPollingInterval = hwSensor->getPollingInterval();
@@ -184,6 +186,7 @@ I2C_Logical_Sensor::I2C_Logical_Sensor(I2C_sensor* hwSensor)
 }
 
 I2C_Logical_Sensor::I2C_Logical_Sensor(I2C_sensor* hwSensor, int pollingInterval, int bus, int address) :
+Sensor(-6),
 mHWSensor(hwSensor), mBus(bus), mAddress(address)
 {
   mConfigurationOk = true;  // Set to false on error
